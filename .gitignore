@@ -15,7 +15,8 @@
 
 # Mono auto generated files
 mono_crash.*
-
+# Ignore Client.cs to prevent pushing secrets
+Client.cs
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
