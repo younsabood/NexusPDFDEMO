@@ -379,10 +379,10 @@
   <ItemGroup>
     <Content Include="icon.ico" />
     <Content Include="NexusPDFDB.mdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="NexusPDFDB_log.ldf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <DependentUpon>NexusPDFDB.mdf</DependentUpon>
     </Content>
     <None Include="Resources\svgviewer-png-output1.png" />
