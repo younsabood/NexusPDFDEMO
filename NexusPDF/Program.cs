@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
+using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -9,14 +10,44 @@ namespace NexusPDF
 {
     public static class Program
     {
+        public static async Task<string> GetFirstJsonAsync()
+        {
+            string json = null; 
+            string query = "SELECT TOP 1 [json] FROM [api].[Json] ORDER BY [Id] ASC;";
+
+            try
+            {
+                using (var conn = new SqlConnection(Properties.Settings.Default.ConnectionString))
+                {
+                    using (var cmd = new SqlCommand(query, conn))
+                    {
+                        await conn.OpenAsync().ConfigureAwait(false); 
+                        object result = await cmd.ExecuteScalarAsync().ConfigureAwait(false);
+
+                        if (result != null)
+                        {
+                            json = result.ToString();
+                        }
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show($"Database error: {ex.Message}", "SQL Error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An unexpected error occurred: {ex.Message}", "Error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+            }
+            return json; 
+        }
         [STAThread]
         static void Main()
         {
             try
             {
-                // Run async initialization
                 var initTask = InitializeApplicationAsync();
-                initTask.Wait(); // Wait for async initialization to complete
+                initTask.Wait(); 
 
                 RunApplication();
             }

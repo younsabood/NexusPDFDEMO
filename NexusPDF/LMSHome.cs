@@ -927,5 +927,11 @@ namespace NexusPDF
                               MessageBoxIcon.Error);
             }
         }
+
+        private void guna2Button1_Click(object sender, EventArgs e)
+        {
+            ShowVersion f = new ShowVersion();
+            f.Show();
+        }
     }
 }

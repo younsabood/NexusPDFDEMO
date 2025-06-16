@@ -81,6 +81,8 @@
             this.starting = new System.Windows.Forms.Label();
             this.UserName = new System.Windows.Forms.Label();
             this.AccountPic = new Guna.UI2.WinForms.Guna2CirclePictureBox();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.guna2Button1 = new Guna.UI2.WinForms.Guna2Button();
             this.guna2Panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.guna2PictureBox1)).BeginInit();
             this.guna2Panel2.SuspendLayout();
@@ -106,6 +108,7 @@
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AccountPic)).BeginInit();
+            this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
             // guna2Panel1
@@ -142,6 +145,7 @@
             // 
             this.TabControl.Controls.Add(this.tabPage1);
             this.TabControl.Controls.Add(this.tabPage2);
+            this.TabControl.Controls.Add(this.tabPage3);
             this.TabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TabControl.ItemSize = new System.Drawing.Size(180, 40);
             this.TabControl.Location = new System.Drawing.Point(0, 0);
@@ -704,7 +708,7 @@
             this.tableLayoutPanel7.ColumnCount = 3;
             this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 36.87943F));
             this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 63.12057F));
-            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 102F));
+            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 103F));
             this.tableLayoutPanel7.Controls.Add(this.supdate, 0, 0);
             this.tableLayoutPanel7.Controls.Add(this.UploadeProgressBar, 1, 0);
             this.tableLayoutPanel7.Controls.Add(this.Cancel, 2, 0);
@@ -741,7 +745,7 @@
             this.UploadeProgressBar.ProgressColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(158)))), ((int)(((byte)(68)))));
             this.UploadeProgressBar.ProgressColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(216)))), ((int)(((byte)(198)))), ((int)(((byte)(144)))));
             this.UploadeProgressBar.ShowText = true;
-            this.UploadeProgressBar.Size = new System.Drawing.Size(334, 28);
+            this.UploadeProgressBar.Size = new System.Drawing.Size(333, 28);
             this.UploadeProgressBar.TabIndex = 28;
             this.UploadeProgressBar.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SystemDefault;
             // 
@@ -760,9 +764,9 @@
             this.Cancel.ForeColor = System.Drawing.Color.White;
             this.Cancel.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(154)))), ((int)(((byte)(113)))), ((int)(((byte)(55)))));
             this.Cancel.HoverState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(154)))), ((int)(((byte)(113)))), ((int)(((byte)(55)))));
-            this.Cancel.Location = new System.Drawing.Point(563, 3);
+            this.Cancel.Location = new System.Drawing.Point(562, 3);
             this.Cancel.Name = "Cancel";
-            this.Cancel.Size = new System.Drawing.Size(97, 42);
+            this.Cancel.Size = new System.Drawing.Size(98, 42);
             this.Cancel.TabIndex = 29;
             this.Cancel.Text = "Cancel";
             this.Cancel.Click += new System.EventHandler(this.Cancel_Click);
@@ -930,6 +934,31 @@
             this.AccountPic.TabStop = false;
             this.AccountPic.UseTransparentBackground = true;
             // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.guna2Button1);
+            this.tabPage3.Location = new System.Drawing.Point(4, 44);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Size = new System.Drawing.Size(1217, 423);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "tabPage3";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // guna2Button1
+            // 
+            this.guna2Button1.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.guna2Button1.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.guna2Button1.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.guna2Button1.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.guna2Button1.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.guna2Button1.ForeColor = System.Drawing.Color.White;
+            this.guna2Button1.Location = new System.Drawing.Point(8, 13);
+            this.guna2Button1.Name = "guna2Button1";
+            this.guna2Button1.Size = new System.Drawing.Size(188, 39);
+            this.guna2Button1.TabIndex = 0;
+            this.guna2Button1.Text = "guna2Button1";
+            this.guna2Button1.Click += new System.EventHandler(this.guna2Button1_Click);
+            // 
             // LMSHome
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 23F);
@@ -971,6 +1000,7 @@
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.AccountPic)).EndInit();
+            this.tabPage3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1028,5 +1058,7 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private Guna.UI2.WinForms.Guna2Button Prevese;
         private Guna.UI2.WinForms.Guna2Button Next;
+        private System.Windows.Forms.TabPage tabPage3;
+        private Guna.UI2.WinForms.Guna2Button guna2Button1;
     }
 }

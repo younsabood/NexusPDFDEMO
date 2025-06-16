@@ -367,25 +367,24 @@ namespace NexusPDF
     overflow-wrap: break-word;
 }
 .source-text {
-    position: absolute; /* Changed to absolute positioning */
-    bottom: 80px; /* Aligned with source-box bottom */
-    left: 20px; /* Aligned with source-box left */
-    background: #bb9b55; /* Solid background color as in source-box */
-    color: white; /* Text color */
-    padding: 6px 12px; /* Padding adjusted */
-    border-radius: 4px; /* Border radius adjusted */
-    font-size: 0.9rem; /* Font size adjusted */
-    font-weight: 500; /* Font weight adjusted */
-    max-width: calc(100% - 40px); /* Max width to prevent overflow */
-    word-wrap: break-word; /* Ensure text wraps */
-    cursor: pointer; /* Pointer cursor on hover */
-    transition: background-color 0.3s ease; /* Smooth transition for hover */
-    user-select: none; /* Prevent text selection */
+    position: absolute;
+    bottom: 80px;
+    left: 20px;
+    background: #bb9b55;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    max-width: calc(100% - 40px);
+    word-wrap: break-word;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    user-select: none;
     z-index:5;
 }
 .source-text:hover {
-    background: #a16f1b; /* Darker background on hover */
-    /* Removed transform and box-shadow as they were not in the reference source-box hover */
+    background: #a16f1b;
 }
 
 /* LTR Specific Styles */
@@ -450,7 +449,7 @@ namespace NexusPDF
         flex-direction: column;
         align-items: center;
         justify-content: flex-start;
-        height: 600px;
+        min-height: 600px;
         padding: 20px;
         color: #333;
         line-height: 1.6;
@@ -464,7 +463,6 @@ namespace NexusPDF
     .card {
         width: 100%;
         height: auto;
-        min-height: 550px;
         transition: transform .6s cubic-bezier(.175, .885, .32, 1.275);
         transform-style: preserve-3d;
         position: relative;
@@ -479,7 +477,8 @@ namespace NexusPDF
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 1px 8px rgba(0, 0, 0, 0.06);
         position: absolute;
         width: 100%;
-        height: 100%;
+        height: auto;
+        min-height: 550px;
         backface-visibility: hidden;
         padding: 35px;
         display: flex;
@@ -506,12 +505,13 @@ namespace NexusPDF
         gap: 18px;
         display: flex;
         margin-bottom: 30px;
+        flex-grow: 1;
     }
     .option {
         position: relative;
-        display: flex; /* Changed from block to flex */
-        align-items: center; /* Added for vertical alignment */
-        padding: 20px 25px 20px 60px; /* Adjusted left padding for custom radio */
+        display: flex;
+        align-items: center;
+        padding: 20px 25px 20px 60px;
         border: 2px solid #e9ecef;
         border-radius: 15px;
         background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
@@ -539,64 +539,55 @@ namespace NexusPDF
     .option:hover::before {
         width: 100%;
     }
-    /* Hide the native radio button but keep it accessible */
     .option input[type='radio'] {
         position: absolute;
         opacity: 0;
         cursor: pointer;
-        /* Make the hit area larger for better touch interaction */
-        height: 30px; /* Increased size */
-        width: 30px;  /* Increased size */
-        left: 15px; /* Position it to align with the custom radio */
+        height: 30px;
+        width: 30px;
+        left: 15px;
         top: 50%;
         transform: translateY(-50%);
-        z-index: 1; /* Ensure it's above the custom radio for clicks */
-        margin: 0; /* Ensure no default margin */
-        padding: 0; /* Ensure no default padding */
+        z-index: 1;
+        margin: 0;
+        padding: 0;
     }
-    /* Custom radio button visual */
     .option .radio-custom {
         display: inline-block;
-        width: 24px; /* Desired size for the radio button */
-        height: 24px; /* Desired size for the radio button */
-        border: 2px solid #a68640; /* Outer circle border color */
+        width: 24px;
+        height: 24px;
+        border: 2px solid #a68640;
         border-radius: 50%;
-        margin-right: 15px; /* Space between radio and text */
+        margin-right: 15px;
         transition: all 0.3s ease;
-        position: absolute; /* Position it precisely within the label */
+        position: absolute;
         left: 20px;
         top: 50%;
         transform: translateY(-50%);
-        box-sizing: border-box; /* Include padding/border in element's total width/height */
+        box-sizing: border-box;
     }
-
-    /* Inner dot of the custom radio button */
     .option .radio-custom::after {
         content: '';
         position: absolute;
         top: 50%;
         left: 50%;
-        transform: translate(-50%, -50%) scale(0); /* Start scaled to 0 */
-        width: 12px; /* Size of the inner dot */
-        height: 12px; /* Size of the inner dot */
+        transform: translate(-50%, -50%) scale(0);
+        width: 12px;
+        height: 12px;
         border-radius: 50%;
-        background-color: #bb9b55; /* Inner dot color */
-        transition: transform 0.3s ease; /* Animate the dot appearance */
+        background-color: #bb9b55;
+        transition: transform 0.3s ease;
     }
-
-    /* When the radio input is checked, style the custom radio */
     .option input[type='radio']:checked + .radio-custom {
-        border-color: #8f6f2b; /* Darker border when checked */
-        background-color: rgba(187, 155, 85, 0.1); /* Subtle background when checked */
+        border-color: #8f6f2b;
+        background-color: rgba(187, 155, 85, 0.1);
     }
-
-    /* When the radio input is checked, make the inner dot visible */
     .option input[type='radio']:checked + .radio-custom::after {
-        transform: translate(-50%, -50%) scale(1); /* Scale to 1 to show the dot */
+        transform: translate(-50%, -50%) scale(1);
     }
     .option-text {
-        display: block; /* Allows text to wrap */
-        flex-grow: 1; /* Allows text to take available space */
+        display: block;
+        flex-grow: 1;
         white-space: pre-wrap;
         word-wrap: break-word;
         overflow-wrap: break-word;
@@ -617,6 +608,7 @@ namespace NexusPDF
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         text-transform: uppercase;
         letter-spacing: 0.5px;
+        flex-shrink: 0;
     }
     .flip-btn {
         background: linear-gradient(135deg, #bb9b55 0%, #a68640 100%);
@@ -649,7 +641,7 @@ namespace NexusPDF
         border: 1px solid #dee2e6;
     }
     @media (max-width: 768px) {
-        .card {
+        .card-face {
             min-height: 500px;
         }
         .question {
@@ -662,22 +654,22 @@ namespace NexusPDF
             margin: 8px 0;
         }
         .option {
-            padding: 15px 20px 15px 50px; /* Adjusted padding for smaller screens */
+            padding: 15px 20px 15px 50px;
         }
         .card-face {
             padding: 25px;
         }
         .option .radio-custom {
-            width: 20px; /* Smaller radio button on mobile */
+            width: 20px;
             height: 20px;
             left: 15px;
         }
         .option .radio-custom::after {
-            width: 10px; /* Smaller dot on mobile */
+            width: 10px;
             height: 10px;
         }
         .option input[type='radio'] {
-            height: 24px; /* Adjusted hit area for smaller screens */
+            height: 24px;
             width: 24px;
         }
     }";
@@ -695,7 +687,7 @@ namespace NexusPDF
         flex-direction: column;
         align-items: center;
         justify-content: flex-start;
-        height: 600px;
+        min-height: 600px;
         padding: 20px;
         color: #333;
         line-height: 1.6;
@@ -709,7 +701,6 @@ namespace NexusPDF
     .card {
         width: 100%;
         height: auto;
-        min-height: 550px;
         transition: transform .6s cubic-bezier(.175, .885, .32, 1.275);
         transform-style: preserve-3d;
         position: relative;
@@ -724,7 +715,8 @@ namespace NexusPDF
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 1px 8px rgba(0, 0, 0, 0.06);
         position: absolute;
         width: 100%;
-        height: 100%;
+        height: auto;
+        min-height: 550px;
         backface-visibility: hidden;
         padding: 35px;
         display: flex;
@@ -755,12 +747,13 @@ namespace NexusPDF
         gap: 18px;
         display: flex;
         margin-bottom: 30px;
+        flex-grow: 1;
     }
     .option {
         position: relative;
-        display: flex; /* Changed from block to flex */
-        align-items: center; /* Added for vertical alignment */
-        padding: 20px 25px 20px 60px; /* Adjusted left padding for custom radio */
+        display: flex;
+        align-items: center;
+        padding: 20px 25px 20px 60px;
         border: 2px solid #e9ecef;
         border-radius: 15px;
         background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
@@ -793,60 +786,51 @@ namespace NexusPDF
     .option:hover::before {
         width: 100%;
     }
-    /* Hide the native radio button but keep it accessible */
     .option input[type='radio'] {
         position: absolute;
         opacity: 0;
         cursor: pointer;
-        /* Make the hit area larger for better touch interaction */
-        height: 30px; /* Increased size */
-        width: 30px;  /* Increased size */
-        left: 15px; /* Position it to align with the custom radio */
+        height: 30px;
+        width: 30px;
+        left: 15px;
         top: 50%;
         transform: translateY(-50%);
-        z-index: 1; /* Ensure it's above the custom radio for clicks */
-        margin: 0; /* Ensure no default margin */
-        padding: 0; /* Ensure no default padding */
+        z-index: 1;
+        margin: 0;
+        padding: 0;
     }
-    /* Custom radio button visual */
     .option .radio-custom {
         display: inline-block;
-        width: 24px; /* Desired size for the radio button */
-        height: 24px; /* Desired size for the radio button */
-        border: 2px solid #a68640; /* Outer circle border color */
+        width: 24px;
+        height: 24px;
+        border: 2px solid #a68640;
         border-radius: 50%;
-        margin-right: 15px; /* Space between radio and text */
+        margin-right: 15px;
         transition: all 0.3s ease;
-        position: absolute; /* Position it precisely within the label */
+        position: absolute;
         left: 20px;
         top: 50%;
         transform: translateY(-50%);
-        box-sizing: border-box; /* Include padding/border in element's total width/height */
+        box-sizing: border-box;
     }
-
-    /* Inner dot of the custom radio button */
     .option .radio-custom::after {
         content: '';
         position: absolute;
         top: 50%;
         left: 50%;
-        transform: translate(-50%, -50%) scale(0); /* Start scaled to 0 */
-        width: 12px; /* Size of the inner dot */
-        height: 12px; /* Size of the inner dot */
+        transform: translate(-50%, -50%) scale(0);
+        width: 12px;
+        height: 12px;
         border-radius: 50%;
-        background-color: #bb9b55; /* Inner dot color */
-        transition: transform 0.3s ease; /* Animate the dot appearance */
+        background-color: #bb9b55;
+        transition: transform 0.3s ease;
     }
-
-    /* When the radio input is checked, style the custom radio */
     .option input[type='radio']:checked + .radio-custom {
-        border-color: #8f6f2b; /* Darker border when checked */
-        background-color: rgba(187, 155, 85, 0.1); /* Subtle background when checked */
+        border-color: #8f6f2b;
+        background-color: rgba(187, 155, 85, 0.1);
     }
-
-    /* When the radio input is checked, make the inner dot visible */
     .option input[type='radio']:checked + .radio-custom::after {
-        transform: translate(-50%, -50%) scale(1); /* Scale to 1 to show the dot */
+        transform: translate(-50%, -50%) scale(1);
     }
     .option-text {
         display: block;
@@ -873,6 +857,7 @@ namespace NexusPDF
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         text-transform: uppercase;
         letter-spacing: 0.5px;
+        flex-shrink: 0;
     }
     .flip-btn {
         background: linear-gradient(135deg, #bb9b55 0%, #a68640 100%);
@@ -904,7 +889,7 @@ namespace NexusPDF
         border: 1px solid #dee2e6;
     }
     @media (max-width: 768px) {
-        .card {
+        .card-face {
             min-height: 500px;
         }
         .question {
@@ -917,22 +902,22 @@ namespace NexusPDF
             margin: 8px 0;
         }
         .option {
-            padding: 15px 20px 15px 50px; /* Adjusted padding for smaller screens */
+            padding: 15px 20px 15px 50px;
         }
         .card-face {
             padding: 25px;
         }
         .option .radio-custom {
-            width: 20px; /* Smaller radio button on mobile */
+            width: 20px;
             height: 20px;
             left: 15px;
         }
         .option .radio-custom::after {
-            width: 10px; /* Smaller dot on mobile */
+            width: 10px;
             height: 10px;
         }
         .option input[type='radio'] {
-            height: 24px; /* Adjusted hit area for smaller screens */
+            height: 24px;
             width: 24px;
         }
     }";
@@ -947,6 +932,5 @@ namespace NexusPDF
                 return baseStyles + conditionalStyles2;
             }
         }
-
     }
 }
