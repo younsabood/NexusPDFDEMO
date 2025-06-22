@@ -930,8 +930,16 @@ namespace NexusPDF
 
         private void guna2Button1_Click(object sender, EventArgs e)
         {
-            ShowVersion f = new ShowVersion();
-            f.Show();
+            if(Properties.Settings.Default.CurrentRelease == Properties.Settings.Default.ReleaseUpdate)
+            {
+                MessageBox.Show("you are uptodate","No update", MessageBoxButtons.OK,MessageBoxIcon.Information);
+            }
+            else
+            {
+                ShowVersion f = new ShowVersion();
+                f.Show();
+            }
+
         }
     }
 }

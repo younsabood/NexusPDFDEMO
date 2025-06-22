@@ -2,6 +2,7 @@
 using System.Data;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Newtonsoft.Json.Linq;
 
 namespace NexusPDF
 {
@@ -19,9 +20,32 @@ namespace NexusPDF
                 return cp;
             }
         }
+        public async Task GetVersion()
+        {
+            string jsonString = await UrlContentReader.ReadContentFromUrlAsync(Api.VersionControl);
+            double version = JArray.Parse(jsonString).First.Value<double>("version");
+            Properties.Settings.Default.ReleaseUpdate = version;
+            Properties.Settings.Default.Save();
+        }
+        public void CompareAndUpdateVersion()
+        {
+            double CurrentRelease = Properties.Settings.Default.CurrentRelease;
+            double ReleaseUpdate = Properties.Settings.Default.ReleaseUpdate;
 
+            if (CurrentRelease != ReleaseUpdate)
+            {
+                Properties.Settings.Default.ISUpdate = true;
+                Properties.Settings.Default.Save();
+            }
+            else if (CurrentRelease == ReleaseUpdate)
+            {
+                Properties.Settings.Default.ISUpdate = false;
+                Properties.Settings.Default.Save();
+            }
+        }
         public splash()
         {
+
             InitializeComponent();
 
             splashTimer.Tick += SplashTimer_Tick;
@@ -91,6 +115,12 @@ namespace NexusPDF
             }
             float newFontSize = Math.Max(10f, progressBar.Height / 2.5f);
             progressBar.Font = new System.Drawing.Font(progressBar.Font.FontFamily, newFontSize, System.Drawing.FontStyle.Regular);
+        }
+
+        private async void splash_Load(object sender, EventArgs e)
+        {
+            await GetVersion();
+            CompareAndUpdateVersion();
         }
     }
 }

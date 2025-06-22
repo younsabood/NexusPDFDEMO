@@ -110,6 +110,7 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "splash";
+            this.Load += new System.EventHandler(this.splash_Load);
             this.tableLayoutPanel.ResumeLayout(false);
             this.progressPanel.ResumeLayout(false);
             this.ResumeLayout(false);

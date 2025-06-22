@@ -38,7 +38,7 @@ namespace NexusPDF
 
             if (jsonFromUrl != null && jsonFromUrl != jsonFromDb)
             {
-                await UpdateOrInsertJsonInDbAsync(jsonFromUrl);
+                await InsertJsonInDbAsync(jsonFromUrl);
             }
         }
 
@@ -49,7 +49,7 @@ namespace NexusPDF
             return result?.ToString();
         }
 
-        private async Task UpdateOrInsertJsonInDbAsync(string newJson)
+        private async Task InsertJsonInDbAsync(string newJson)
         {
             string deleteQuery = "DELETE FROM [api].[Json];";
             await _sqlHelper.ExecuteNonQueryAsync(deleteQuery);

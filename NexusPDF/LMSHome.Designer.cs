@@ -494,6 +494,7 @@
             // label2
             // 
             this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label2.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.Black;
             this.label2.Location = new System.Drawing.Point(3, 0);
             this.label2.Name = "label2";
@@ -708,7 +709,7 @@
             this.tableLayoutPanel7.ColumnCount = 3;
             this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 36.87943F));
             this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 63.12057F));
-            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 103F));
+            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 104F));
             this.tableLayoutPanel7.Controls.Add(this.supdate, 0, 0);
             this.tableLayoutPanel7.Controls.Add(this.UploadeProgressBar, 1, 0);
             this.tableLayoutPanel7.Controls.Add(this.Cancel, 2, 0);
@@ -745,7 +746,7 @@
             this.UploadeProgressBar.ProgressColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(158)))), ((int)(((byte)(68)))));
             this.UploadeProgressBar.ProgressColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(216)))), ((int)(((byte)(198)))), ((int)(((byte)(144)))));
             this.UploadeProgressBar.ShowText = true;
-            this.UploadeProgressBar.Size = new System.Drawing.Size(333, 28);
+            this.UploadeProgressBar.Size = new System.Drawing.Size(332, 28);
             this.UploadeProgressBar.TabIndex = 28;
             this.UploadeProgressBar.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SystemDefault;
             // 
@@ -764,9 +765,9 @@
             this.Cancel.ForeColor = System.Drawing.Color.White;
             this.Cancel.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(154)))), ((int)(((byte)(113)))), ((int)(((byte)(55)))));
             this.Cancel.HoverState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(154)))), ((int)(((byte)(113)))), ((int)(((byte)(55)))));
-            this.Cancel.Location = new System.Drawing.Point(562, 3);
+            this.Cancel.Location = new System.Drawing.Point(561, 3);
             this.Cancel.Name = "Cancel";
-            this.Cancel.Size = new System.Drawing.Size(98, 42);
+            this.Cancel.Size = new System.Drawing.Size(99, 42);
             this.Cancel.TabIndex = 29;
             this.Cancel.Text = "Cancel";
             this.Cancel.Click += new System.EventHandler(this.Cancel_Click);

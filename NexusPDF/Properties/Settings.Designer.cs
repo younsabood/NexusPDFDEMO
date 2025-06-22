@@ -58,5 +58,37 @@ namespace NexusPDF.Properties {
                 this["googleAI"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public double ReleaseUpdate {
+            get {
+                return ((double)(this["ReleaseUpdate"]));
+            }
+            set {
+                this["ReleaseUpdate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public double CurrentRelease {
+            get {
+                return ((double)(this["CurrentRelease"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ISUpdate {
+            get {
+                return ((bool)(this["ISUpdate"]));
+            }
+            set {
+                this["ISUpdate"] = value;
+            }
+        }
     }
 }
