@@ -405,6 +405,15 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <DependentUpon>NexusPDFDB.mdf</DependentUpon>
     </Content>
+    <None Include="Resources\icons8-x-502.png" />
+    <None Include="Resources\icons8-x-50 %281%29.png" />
+    <None Include="Resources\icons8-x-501.png" />
+    <None Include="Resources\icons8-checked-checkbox-50.png" />
+    <None Include="Resources\icons8-checkbox-50.png" />
+    <None Include="Resources\icons8-right-50.png.png" />
+    <None Include="Resources\icons8-right-50.png.bmp" />
+    <None Include="Resources\icons8-x-50.png" />
+    <None Include="Resources\icons8-right-50.png" />
     <None Include="Resources\icons8-update.gif" />
     <None Include="Resources\icons8-update-50.png" />
     <None Include="Resources\svgviewer-png-output1.png" />

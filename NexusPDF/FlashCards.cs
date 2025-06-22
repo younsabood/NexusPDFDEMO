@@ -1,8 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Data;
+using System.Reflection;
+using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 using GenerativeAI.Types;
 using static NexusPDF.QuestionsOBJ;
+using System.Drawing;
 
 namespace NexusPDF
 {
@@ -10,10 +16,13 @@ namespace NexusPDF
     {
         private FlashCard FlashCard;
         private List<FlashCardOBJ.FlashCard> Cards;
+        private FlashCardOBJ.FlashCard Card;
         private int currentCardIndex = 0;
-
-        public FlashCards(string formattedJson)
+        private static readonly SqlHelper SqlHelper = new SqlHelper(Properties.Settings.Default.ConnectionString);
+        private string PDFName;
+        public FlashCards(string formattedJson, string pdfname)
         {
+            PDFName = pdfname;
             InitializeComponent();
             var result = FlashCardOBJ.FromJson(formattedJson);
             if (result.FlashCards != null && result.FlashCards.Count > 0)
@@ -29,8 +38,8 @@ namespace NexusPDF
             if (index < 0 || index >= Cards.Count)
                 return;
 
-            var Card = Cards[index];
-            exam.Controls.Clear(); // Clear previous question(s)
+            Card = Cards[index];
+            exam.Controls.Clear();
             InitializeComponents(
                 Card.Question,
                 Card.Explanation,
@@ -39,11 +48,14 @@ namespace NexusPDF
                 Card.Subject);
         }
 
-        private void NextQA_Click(object sender, EventArgs e)
+        private async void NextQA_Click(object sender, EventArgs e)
         {
             if (Cards == null || Cards.Count == 0)
+            {
                 return;
-
+            }
+            ;
+            await InsertFlashCardAsync(Cards[currentCardIndex]);
             if (currentCardIndex < Cards.Count - 1)
             {
                 currentCardIndex++;
@@ -81,8 +93,68 @@ namespace NexusPDF
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.ExStyle |= 0x02000000; // WS_EX_COMPOSITED
+                cp.ExStyle |= 0x02000000;
                 return cp;
+            }
+        }
+
+        private void Correct_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!Correct.Checked)
+            {
+                Correct.Image = Properties.Resources.icons8_exit_50__1_;
+            }
+        }
+
+        public async Task InsertFlashCardAsync(FlashCardOBJ.FlashCard card)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(PDFName))
+                    throw new ArgumentException("PDF Name cannot be null or empty.", nameof(PDFName));
+                if (card == null)
+                    throw new ArgumentNullException(nameof(card), "FlashCard object cannot be null.");
+                if (string.IsNullOrWhiteSpace(card.Question))
+                    throw new ArgumentException("Question in FlashCard object cannot be null or empty.", nameof(card.Question));
+
+                const string query = @"
+                    INSERT INTO [PDF].[FlashCards] (
+                        [pdf_name],
+                        [question],
+                        [explanation],
+                        [citation],
+                        [verbatim],
+                        [subject],
+                        [remembered]
+                    )
+                    VALUES (
+                        @pdf_name,
+                        @question,
+                        @explanation,
+                        @citation,
+                        @verbatim,
+                        @subject,
+                        @remembered
+                    );
+                    SELECT SCOPE_IDENTITY();";
+
+                SqlParameter[] parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@pdf_name", SqlDbType.NVarChar, 255) { Value = PDFName },
+                    new SqlParameter("@question", SqlDbType.NVarChar) { Value = card.Question },
+                    new SqlParameter("@explanation", SqlDbType.NVarChar) { Value = (object)card.Explanation ?? DBNull.Value },
+                    new SqlParameter("@citation", SqlDbType.NVarChar) { Value = (object)card.Citation ?? DBNull.Value },
+                    new SqlParameter("@verbatim", SqlDbType.NVarChar) { Value = (object)card.Verbatim ?? DBNull.Value },
+                    new SqlParameter("@subject", SqlDbType.NVarChar, 255) { Value = (object)card.Subject ?? DBNull.Value },
+                    new SqlParameter("@remembered", SqlDbType.Bit) { Value = Correct.Checked }
+                };
+                int x = await SqlHelper.ExecuteNonQueryAsync(query, parameters);
+                Correct.Image = Properties.Resources.icons8_x_501;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error inserting FlashCard into database: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw;
             }
         }
     }

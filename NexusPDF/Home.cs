@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -806,7 +807,7 @@ namespace NexusPDF
             }
         }
 
-        private void ProcessResponse(string response, string operationId)
+        private async Task ProcessResponse(string response, string operationId)
         {
             // Critical check: Only process if this is still the current operation
             lock (lockObject)
@@ -836,7 +837,9 @@ namespace NexusPDF
                 }
                 else
                 {
-                    var aShow = new FlashCards(response);
+                    string originalPdfName = Path.GetFileNameWithoutExtension(Path_1.Text);
+                    var aShow = new FlashCards(response, originalPdfName);
+                    await StorePdfAsync(Path_1.Text, originalPdfName);
                     aShow.Show();
                     aShow.FormClosed += (sender, e) => HandleFormClosed();
                 }
@@ -897,6 +900,31 @@ namespace NexusPDF
                 OperationCanceled = true; // Set the flag first
                 AI.CancelOperation();
                 ResetForm();
+            }
+        }
+        #endregion
+        #region PDFDB
+        public static async Task StorePdfAsync(string filePath, string pdfName)
+        {
+            try
+            {
+                byte[] pdfData = File.ReadAllBytes(filePath);
+                string query = "INSERT INTO [PDF].[PDFs] ([pdf_name], [pdf_data]) VALUES (@pdfName, @pdfData)";
+
+                SqlParameter[] parameters = new SqlParameter[]
+                {
+                new SqlParameter("@pdfName", pdfName),
+                new SqlParameter("@pdfData", pdfData)
+                };
+
+                using (var sqlHelper = new SqlHelper(Properties.Settings.Default.ConnectionString))
+                {
+                    int rowsAffected = await sqlHelper.ExecuteNonQueryAsync(query, parameters);
+                }
+            }
+            catch (Exception ex)
+            {
+                return;
             }
         }
         #endregion

@@ -73,6 +73,26 @@ namespace NexusPDF.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap icons8_checkbox_50 {
+            get {
+                object obj = ResourceManager.GetObject("icons8-checkbox-50", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap icons8_checked_checkbox_50 {
+            get {
+                object obj = ResourceManager.GetObject("icons8-checked-checkbox-50", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap icons8_email_100 {
             get {
                 object obj = ResourceManager.GetObject("icons8-email-100", resourceCulture);
@@ -166,6 +186,36 @@ namespace NexusPDF.Properties {
         internal static System.Drawing.Bitmap icons8_upload_to_the_cloud_1001 {
             get {
                 object obj = ResourceManager.GetObject("icons8-upload-to-the-cloud-1001", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap icons8_x_50 {
+            get {
+                object obj = ResourceManager.GetObject("icons8-x-50", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap icons8_x_50__1_ {
+            get {
+                object obj = ResourceManager.GetObject("icons8-x-50 (1)", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap icons8_x_501 {
+            get {
+                object obj = ResourceManager.GetObject("icons8-x-501", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
