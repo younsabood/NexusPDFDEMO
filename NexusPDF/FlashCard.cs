@@ -4,6 +4,9 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using PdfSharp.Pdf;
+using System.Data.SqlClient;
+using System.Data;
 
 namespace NexusPDF
 {
@@ -16,6 +19,10 @@ namespace NexusPDF
         private string _Source;
         private string _Subject;
         private bool _isWebViewInitialized = false;
+        private bool _isRemembered = false;
+        private bool _hasBeenFlippedOnce = false; // Track if card has been flipped at least once
+        private static readonly SqlHelper SqlHelper = new SqlHelper(Properties.Settings.Default.ConnectionString);
+        private string PDFName;
 
         public FlashCard()
         {
@@ -35,6 +42,16 @@ namespace NexusPDF
         }
 
         public string QuestionText { get; set; } = "Question goes here.";
+
+        public bool IsRemembered
+        {
+            get => _isRemembered;
+            set
+            {
+                _isRemembered = value;
+                RenderHtmlIfInitialized();
+            }
+        }
 
         public string Explanation
         {
@@ -74,6 +91,13 @@ namespace NexusPDF
                 _Subject = value;
                 RenderHtmlIfInitialized();
             }
+        }
+
+        // Property to set the PDF name
+        public string PdfName
+        {
+            get => PDFName;
+            set => PDFName = value;
         }
 
         private async void InitializeWebView()
@@ -119,7 +143,56 @@ namespace NexusPDF
             }
         }
 
-        private void OnWebMessageReceived(object sender, CoreWebView2WebMessageReceivedEventArgs e)
+        public async Task InsertFlashCardAsync()
+        {
+            if (!_isRemembered)
+            {
+                try
+                {
+                    if (string.IsNullOrWhiteSpace(PDFName))
+                        throw new ArgumentException("PDF Name cannot be null or empty.", nameof(PDFName));
+
+                    const string query = @"
+                    INSERT INTO [PDF].[INCorrectFlashCards] (
+                        [pdf_name],
+                        [question],
+                        [explanation],
+                        [citation],
+                        [verbatim],
+                        [subject]
+                    )
+                    VALUES (
+                        @pdf_name,
+                        @question,
+                        @explanation,
+                        @citation,
+                        @verbatim,
+                        @subject
+                    );
+                    SELECT SCOPE_IDENTITY();";
+
+                    SqlParameter[] parameters = new SqlParameter[]
+                    {
+                        new SqlParameter("@pdf_name", SqlDbType.NVarChar, 255) { Value = PDFName },
+                        new SqlParameter("@question", SqlDbType.NVarChar) { Value = QuestionText ?? (object)DBNull.Value },
+                        new SqlParameter("@explanation", SqlDbType.NVarChar) { Value = (object)_Explanation ?? DBNull.Value },
+                        new SqlParameter("@citation", SqlDbType.NVarChar) { Value = (object)_Source ?? DBNull.Value },
+                        new SqlParameter("@verbatim", SqlDbType.NVarChar) { Value = (object)_Verbatim ?? DBNull.Value },
+                        new SqlParameter("@subject", SqlDbType.NVarChar, 255) { Value = (object)_Subject ?? DBNull.Value }
+                    };
+
+                    await SqlHelper.ExecuteNonQueryAsync(query, parameters);
+                    MessageBox.Show("ok");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error inserting FlashCard into database: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    throw;
+                }
+            }
+        }
+
+        private async void OnWebMessageReceived(object sender, CoreWebView2WebMessageReceivedEventArgs e)
         {
             string message = e.TryGetWebMessageAsString();
 
@@ -127,7 +200,23 @@ namespace NexusPDF
             {
                 OpenPdfDirectory();
             }
+            else if (message.StartsWith("rememberToggle:"))
+            {
+                bool isChecked = message.Substring("rememberToggle:".Length) == "true";
+                _isRemembered = isChecked;
+
+                // Only insert into database if this is the first flip
+                if (!_hasBeenFlippedOnce)
+                {
+                    await InsertFlashCardAsync();
+                    _hasBeenFlippedOnce = true;
+                }
+
+                OnRememberStateChanged?.Invoke(this, _isRemembered);
+            }
         }
+
+        public event EventHandler<bool> OnRememberStateChanged;
 
         private void OpenPdfDirectory()
         {
@@ -170,11 +259,12 @@ namespace NexusPDF
                 return;
             }
 
-            string sanitizedQuestion = System.Net.WebUtility.HtmlEncode(QuestionText);
-            string sanitizedExplanation = System.Net.WebUtility.HtmlEncode(Explanation);
-            string sanitizedVerbatim = System.Net.WebUtility.HtmlEncode(Verbatim);
-            string sanitizedSource = System.Net.WebUtility.HtmlEncode(Source);
-            string sanitizedSubject = System.Net.WebUtility.HtmlEncode(Subject);
+            string sanitizedQuestion = System.Net.WebUtility.HtmlEncode(QuestionText ?? "");
+            string sanitizedExplanation = System.Net.WebUtility.HtmlEncode(Explanation ?? "");
+            string sanitizedVerbatim = System.Net.WebUtility.HtmlEncode(Verbatim ?? "");
+            string sanitizedSource = System.Net.WebUtility.HtmlEncode(Source ?? "");
+            string sanitizedSubject = System.Net.WebUtility.HtmlEncode(Subject ?? "");
+            string checkedAttribute = _isRemembered ? "checked" : "";
 
             var html = $@"
             <!DOCTYPE html>
@@ -192,7 +282,13 @@ namespace NexusPDF
                     <div class='card'>
                         <div class='card-face card-front'>
                             <div class='question' id='questionText'>{sanitizedQuestion}</div>
-                            <button class='flip-btn' onclick='flipCard()'>Check Answer</button>
+                            <div class='answer-buttons' id='initialButtons'>
+                                <button class='remember-btn' onclick='rememberAndFlip()'>✓ I Remember</button>
+                                <button class='dont-remember-btn' onclick='dontRememberAndFlip()'>✗ I Don't Remember</button>
+                            </div>
+                            <div class='flip-again-container' id='flipAgainContainer' style='display: none;'>
+                                <button class='flip-btn flip-again-btn' onclick='flipAgain()'>↻ Flip Again</button>
+                            </div>
                         </div>
                         <div class='card-face card-back'>
                             <div class='subject-text' id='subjectText'>{sanitizedSubject}</div>
@@ -204,18 +300,49 @@ namespace NexusPDF
                                 <div class='verbatim-text' id='verbatimText'>{sanitizedVerbatim}</div>
                             </div>
                             <div class='source-box' id='sourceText' onclick='openPdfDirectory()'>{sanitizedSource}</div>
-                            <button class='flip-btn back-btn' onclick='flipBack()'>Back to Question</button>
+                            <div class='back-buttons'>
+                                <button class='flip-btn back-btn' onclick='flipBack()'>Back to Question</button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <script>
+                    let isRemembered = {(_isRemembered ? "true" : "false")};
+                    let hasBeenFlippedOnce = {(_hasBeenFlippedOnce ? "true" : "false")};
+                    
                     function flipCard() {{
                         document.getElementById('flipCard').classList.add('flipped');
                     }}
                     
                     function flipBack() {{
                         document.getElementById('flipCard').classList.remove('flipped');
+                    }}
+                    
+                    function rememberAndFlip() {{
+                        isRemembered = true;
+                        window.chrome.webview.postMessage('rememberToggle:true');
+                        flipCard();
+                        hasBeenFlippedOnce = true;
+                        // Hide initial buttons and show flip again button
+                        document.getElementById('initialButtons').style.display = 'none';
+                        document.getElementById('flipAgainContainer').style.display = 'flex';
+                    }}
+                    
+                    function dontRememberAndFlip() {{
+                        isRemembered = false;
+                        window.chrome.webview.postMessage('rememberToggle:false');
+                        flipCard();
+                        hasBeenFlippedOnce = true;
+                        // Hide initial buttons and show flip again button
+                        document.getElementById('initialButtons').style.display = 'none';
+                        document.getElementById('flipAgainContainer').style.display = 'flex';
+                    }}
+                    
+                    function flipAgain() {{
+                        // Simply flip the card without any database operations
+                        window.chrome.webview.postMessage('flipAgain');
+                        flipCard();
                     }}
                     
                     function openPdfDirectory() {{
@@ -340,6 +467,56 @@ namespace NexusPDF
             .card-back {
                 transform: rotateY(180deg);
                 justify-content: flex-start;
+                padding-bottom: 80px; /* Make room for both buttons */
+            }
+
+            /* Answer Buttons */
+            .answer-buttons, .flip-again-container {
+                display: flex;
+                gap: 20px;
+                margin-top: 30px;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .remember-btn, .dont-remember-btn, .flip-again-btn {
+                font-size: 1.1rem;
+                padding: 15px 30px;
+                font-weight: 600;
+                border: none;
+                border-radius: 12px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                flex: 1;
+                min-width: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+            }
+
+            .remember-btn {
+                background: #28a745;
+                color: white;
+                box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+            }
+
+            .remember-btn:hover {
+                background: #218838;
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+            }
+
+            .dont-remember-btn {
+                background: #dc3545;
+                color: white;
+                box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+            }
+
+            .dont-remember-btn:hover {
+                background: #c82333;
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
             }
 
             .question {
@@ -347,6 +524,7 @@ namespace NexusPDF
                 font-weight: 500;
                 text-align: center;
                 margin-bottom: 20px;
+                margin-top: 40px;
                 flex-grow: 1;
                 display: flex;
                 align-items: center;
@@ -380,7 +558,7 @@ namespace NexusPDF
                 padding-right: 10px;
                 margin-bottom: 20px;
                 min-height: 0;
-                max-height: calc(630px - 200px);
+                max-height: calc(630px - 250px); /* Adjusted for two buttons */
                 scrollbar-width: thin;
                 direction: auto;
                 unicode-bidi: embed;
@@ -455,19 +633,28 @@ namespace NexusPDF
                 background: #a16f1b;
             }
 
+            /* Back buttons container */
+            .back-buttons {
+                position: absolute;
+                bottom: 20px;
+                left: 20px;
+                right: 20px;
+                display: flex;
+                gap: 10px;
+                justify-content: center;
+            }
+
             .back-btn, .flip-btn {
                 font-size: 1rem;
                 text-align: center;
-                margin-top: 20px;
-                display: inline-block;
                 padding: 12px 24px;
                 font-weight: 600;
                 border: none;
                 border-radius: 10px;
                 cursor: pointer;
                 transition: background .3s, box-shadow .3s;
-                align-self: center;
-                flex-shrink: 0;
+                flex: 1;
+                max-width: 200px;
             }
 
             .flip-btn {
@@ -488,6 +675,18 @@ namespace NexusPDF
             .back-btn:focus, .back-btn:hover {
                 background: #ccc;
                 box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .flip-again-btn {
+                background: #6c757d;
+                color: #fff;
+                box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+            }
+
+            .flip-again-btn:hover {
+                background: #5a6268;
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(108, 117, 125, 0.4);
             }
 
             .explanation-container::-webkit-scrollbar {
@@ -518,17 +717,42 @@ namespace NexusPDF
                     line-height: 1.6;
                 }
 
+                .back-buttons {
+                    flex-direction: column;
+                    gap: 8px;
+                }
+
                 .back-btn, .flip-btn {
                     width: 100%;
                     padding: 12px;
+                    max-width: none;
+                }
+
+                .answer-buttons, .flip-again-container {
+                    flex-direction: column;
+                    gap: 15px;
+                    margin-top: 20px;
+                }
+
+                .remember-btn, .dont-remember-btn, .flip-again-btn {
+                    font-size: 1rem;
+                    padding: 12px 20px;
                 }
 
                 .card-face {
                     padding: 20px;
                 }
 
+                .card-back {
+                    padding-bottom: 120px; /* More space for stacked buttons on mobile */
+                }
+
                 .source-box {
-                    bottom: 60px;
+                    bottom: 110px; /* Adjust for stacked buttons */
+                }
+
+                .explanation-container {
+                    max-height: calc(630px - 300px); /* Adjusted for mobile layout */
                 }
             }
 

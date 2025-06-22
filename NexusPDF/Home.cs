@@ -928,5 +928,8 @@ namespace NexusPDF
             }
         }
         #endregion
+        #region PDF Tap
+
+        #endregion
     }
 }
