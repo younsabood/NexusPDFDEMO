@@ -812,13 +812,13 @@
             this.tableLayoutPanel2.Controls.Add(this.starting, 1, 1);
             this.tableLayoutPanel2.Controls.Add(this.UserName, 0, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(127, 0);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(126, 0);
             this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 2;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(969, 120);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(970, 120);
             this.tableLayoutPanel2.TabIndex = 2;
             // 
             // Gmail
@@ -841,7 +841,7 @@
             this.expiration.ForeColor = System.Drawing.Color.Black;
             this.expiration.Location = new System.Drawing.Point(358, 0);
             this.expiration.Name = "expiration";
-            this.expiration.Size = new System.Drawing.Size(608, 60);
+            this.expiration.Size = new System.Drawing.Size(609, 60);
             this.expiration.TabIndex = 2;
             this.expiration.Text = "Expiration Free Trial In :  ";
             this.expiration.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -853,7 +853,7 @@
             this.starting.ForeColor = System.Drawing.Color.Black;
             this.starting.Location = new System.Drawing.Point(358, 60);
             this.starting.Name = "starting";
-            this.starting.Size = new System.Drawing.Size(608, 60);
+            this.starting.Size = new System.Drawing.Size(609, 60);
             this.starting.TabIndex = 1;
             this.starting.Text = "Starting Free Trial In :  ";
             this.starting.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -879,7 +879,7 @@
             this.AccountPic.Location = new System.Drawing.Point(3, 3);
             this.AccountPic.Name = "AccountPic";
             this.AccountPic.ShadowDecoration.Mode = Guna.UI2.WinForms.Enums.ShadowMode.Circle;
-            this.AccountPic.Size = new System.Drawing.Size(121, 114);
+            this.AccountPic.Size = new System.Drawing.Size(120, 114);
             this.AccountPic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.AccountPic.TabIndex = 1;
             this.AccountPic.TabStop = false;
