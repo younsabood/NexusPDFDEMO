@@ -140,7 +140,7 @@
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(1096, 643);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "tabPage1";
+            this.tabPage1.Text = "Home";
             // 
             // tabPage2
             // 
@@ -151,7 +151,7 @@
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(1096, 643);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "tabPage2";
+            this.tabPage2.Text = "Quick Exam";
             // 
             // guna2GroupBox2
             // 
@@ -542,7 +542,7 @@
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Size = new System.Drawing.Size(1096, 643);
             this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "tabPage3";
+            this.tabPage3.Text = "Accounts";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // PDFDataPanal
@@ -866,6 +866,7 @@
             this.UserName.Location = new System.Drawing.Point(20, 0);
             this.UserName.Margin = new System.Windows.Forms.Padding(20, 0, 3, 0);
             this.UserName.Name = "UserName";
+            this.UserName.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.UserName.Size = new System.Drawing.Size(332, 60);
             this.UserName.TabIndex = 0;
             this.UserName.Text = "label1";
