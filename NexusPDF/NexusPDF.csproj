@@ -268,6 +268,12 @@
     </Compile>
     <Compile Include="Client.cs" />
     <Compile Include="FlashCardOBJ.cs" />
+    <Compile Include="Home.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Home.Designer.cs">
+      <DependentUpon>Home.cs</DependentUpon>
+    </Compile>
     <Compile Include="IPLocationService.cs" />
     <Compile Include="JsonExtractorFlashCards.cs" />
     <Compile Include="PdfSplitter.cs" />
@@ -347,6 +353,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FlashCards.resx">
       <DependentUpon>FlashCards.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Home.resx">
+      <DependentUpon>Home.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="HtmlMultipleChoice.resx">
       <DependentUpon>HtmlMultipleChoice.cs</DependentUpon>
