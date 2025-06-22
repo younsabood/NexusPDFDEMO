@@ -84,7 +84,7 @@ namespace NexusPDF
 
                 if (splashResult == DialogResult.OK)
                 {
-                    Application.Run(new LMSHome());
+                    Application.Run(new Home());
                 }
                 else
                 {
@@ -99,7 +99,7 @@ namespace NexusPDF
             {
                 if (loginPage.ShowDialog() == DialogResult.OK)
                 {
-                    Application.Run(new LMSHome());
+                    Application.Run(new Home());
                 }
                 else
                 {

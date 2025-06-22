@@ -299,12 +299,6 @@
       <DependentUpon>HtmlMultipleChoice.cs</DependentUpon>
     </Compile>
     <Compile Include="JsonExtractor.cs" />
-    <Compile Include="LMSHome.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="LMSHome.Designer.cs">
-      <DependentUpon>LMSHome.cs</DependentUpon>
-    </Compile>
     <Compile Include="LoginPage.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -359,9 +353,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="HtmlMultipleChoice.resx">
       <DependentUpon>HtmlMultipleChoice.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="LMSHome.resx">
-      <DependentUpon>LMSHome.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LoginPage.resx">
       <DependentUpon>LoginPage.cs</DependentUpon>
