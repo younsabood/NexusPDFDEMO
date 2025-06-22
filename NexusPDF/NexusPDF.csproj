@@ -405,6 +405,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <DependentUpon>NexusPDFDB.mdf</DependentUpon>
     </Content>
+    <None Include="Resources\icons8-update.gif" />
+    <None Include="Resources\icons8-update-50.png" />
     <None Include="Resources\svgviewer-png-output1.png" />
   </ItemGroup>
   <ItemGroup>

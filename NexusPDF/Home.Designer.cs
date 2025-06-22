@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Home));
             this.TabControl = new Guna.UI2.WinForms.Guna2TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
@@ -44,8 +45,8 @@
             this.language = new Guna.UI2.WinForms.Guna2ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-            this.Reset = new Guna.UI2.WinForms.Guna2Button();
             this.deffnum = new Guna.UI2.WinForms.Guna2NumericUpDown();
+            this.ResetImage = new Guna.UI2.WinForms.Guna2ImageButton();
             this.label4 = new System.Windows.Forms.Label();
             this.contentDomain = new Guna.UI2.WinForms.Guna2ComboBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -349,10 +350,10 @@
             // tableLayoutPanel3
             // 
             this.tableLayoutPanel3.ColumnCount = 2;
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 39.41606F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60.58394F));
-            this.tableLayoutPanel3.Controls.Add(this.Reset, 1, 0);
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 32.08868F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 67.91132F));
             this.tableLayoutPanel3.Controls.Add(this.deffnum, 0, 0);
+            this.tableLayoutPanel3.Controls.Add(this.ResetImage, 1, 0);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel3.Location = new System.Drawing.Point(219, 232);
             this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
@@ -361,24 +362,6 @@
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel3.Size = new System.Drawing.Size(857, 61);
             this.tableLayoutPanel3.TabIndex = 32;
-            // 
-            // Reset
-            // 
-            this.Reset.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
-            this.Reset.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
-            this.Reset.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
-            this.Reset.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
-            this.Reset.Dock = System.Windows.Forms.DockStyle.Right;
-            this.Reset.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(196)))), ((int)(((byte)(127)))));
-            this.Reset.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Reset.ForeColor = System.Drawing.Color.White;
-            this.Reset.Location = new System.Drawing.Point(676, 8);
-            this.Reset.Margin = new System.Windows.Forms.Padding(8);
-            this.Reset.Name = "Reset";
-            this.Reset.Size = new System.Drawing.Size(173, 45);
-            this.Reset.TabIndex = 28;
-            this.Reset.Text = "Reset";
-            this.Reset.Click += new System.EventHandler(this.Reset_Click);
             // 
             // deffnum
             // 
@@ -407,6 +390,24 @@
             0,
             0,
             0});
+            // 
+            // ResetImage
+            // 
+            this.ResetImage.AnimatedGIF = true;
+            this.ResetImage.CheckedState.ImageSize = new System.Drawing.Size(64, 64);
+            this.ResetImage.Dock = System.Windows.Forms.DockStyle.Left;
+            this.ResetImage.HoverState.Image = global::NexusPDF.Properties.Resources.icons8_update;
+            this.ResetImage.HoverState.ImageSize = new System.Drawing.Size(50, 50);
+            this.ResetImage.Image = global::NexusPDF.Properties.Resources.icons8_update_50;
+            this.ResetImage.ImageOffset = new System.Drawing.Point(0, 0);
+            this.ResetImage.ImageRotate = 0F;
+            this.ResetImage.ImageSize = new System.Drawing.Size(50, 50);
+            this.ResetImage.Location = new System.Drawing.Point(277, 3);
+            this.ResetImage.Name = "ResetImage";
+            this.ResetImage.PressedState.ImageSize = new System.Drawing.Size(50, 50);
+            this.ResetImage.Size = new System.Drawing.Size(64, 55);
+            this.ResetImage.TabIndex = 33;
+            this.ResetImage.Click += new System.EventHandler(this.Reset_Click);
             // 
             // label4
             // 
@@ -894,10 +895,11 @@
             this.ClientSize = new System.Drawing.Size(1284, 651);
             this.Controls.Add(this.TabControl);
             this.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.Name = "Home";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Home";
+            this.Text = "NexusPDF";
             this.Load += new System.EventHandler(this.Home_Load);
             this.TabControl.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
@@ -943,7 +945,6 @@
         private Guna.UI2.WinForms.Guna2ComboBox language;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
-        private Guna.UI2.WinForms.Guna2Button Reset;
         private Guna.UI2.WinForms.Guna2NumericUpDown deffnum;
         private System.Windows.Forms.Label label4;
         private Guna.UI2.WinForms.Guna2ComboBox contentDomain;
@@ -977,5 +978,6 @@
         private System.Windows.Forms.Label eupdate;
         private Guna.UI2.WinForms.Guna2Button Cancel;
         private System.Windows.Forms.Label Path_1;
+        private Guna.UI2.WinForms.Guna2ImageButton ResetImage;
     }
 }

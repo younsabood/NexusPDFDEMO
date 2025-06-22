@@ -95,7 +95,7 @@ namespace NexusPDF
             {
                 Next.Text = "Processing...";
                 Next.Enabled = false;
-                Reset.Enabled = false;
+                ResetImage.Enabled = false;
                 Cancel.Enabled = true;
                 UploadeProgressBar.Value = 0;
             }
@@ -103,7 +103,7 @@ namespace NexusPDF
             {
                 Next.Text = "Next";
                 Next.Enabled = true;
-                Reset.Enabled = true;
+                ResetImage.Enabled = true;
                 Cancel.Enabled = false;
             }
         }
@@ -361,7 +361,7 @@ namespace NexusPDF
 
                 // Reset buttons
                 Prevese.Enabled = false;
-                Reset.Enabled = true;
+                ResetImage.Enabled = true;
                 Next.Enabled = true;
                 Next.Text = "Next";
                 Cancel.Enabled = false;
@@ -825,7 +825,7 @@ namespace NexusPDF
                 isFormOpen = true;
                 Next.Text = "Exam is already open";
                 Next.Enabled = false;
-                Reset.Enabled = false;
+                ResetImage.Enabled = false;
                 Cancel.Enabled = false;
 
                 if (type.SelectedIndex != 4)
