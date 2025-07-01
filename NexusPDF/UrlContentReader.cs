@@ -23,8 +23,6 @@ namespace NexusPDF
                 response.EnsureSuccessStatusCode();
 
                 string content = await response.Content.ReadAsStringAsync();
-
-                // Return the fetched content.
                 return content;
             }
             catch (HttpRequestException e)

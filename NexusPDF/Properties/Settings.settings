@@ -11,11 +11,11 @@
     <Setting Name="googleAI" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="ReleaseUpdate" Type="System.Double" Scope="User">
+    <Setting Name="ReleaseUpdate" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="CurrentRelease" Type="System.Double" Scope="Application">
-      <Value Profile="(Default)">1</Value>
+    <Setting Name="CurrentRelease" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">2.5.4</Value>
     </Setting>
     <Setting Name="ISUpdate" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>

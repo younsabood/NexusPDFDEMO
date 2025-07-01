@@ -96,13 +96,5 @@ namespace NexusPDF
                 return cp;
             }
         }
-
-        private void Correct_CheckedChanged(object sender, EventArgs e)
-        {
-            if (!Correct.Checked)
-            {
-                Correct.Image = Properties.Resources.icons8_exit_50__1_;
-            }
-        }
     }
 }

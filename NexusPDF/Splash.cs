@@ -23,19 +23,28 @@ namespace NexusPDF
         public async Task GetVersion()
         {
             string jsonString = await UrlContentReader.ReadContentFromUrlAsync(Api.VersionControl);
-            double version = JArray.Parse(jsonString).First.Value<double>("version");
+            string version = string.Empty;
+
+            JToken versionToken = JToken.Parse(jsonString).SelectToken("$[0].Version");
+
+            if (versionToken != null)
+            {
+                version = versionToken.ToString();
+            }
             Properties.Settings.Default.ReleaseUpdate = version;
             Properties.Settings.Default.Save();
         }
         public void CompareAndUpdateVersion()
         {
-            double CurrentRelease = Properties.Settings.Default.CurrentRelease;
-            double ReleaseUpdate = Properties.Settings.Default.ReleaseUpdate;
+            string CurrentRelease = Properties.Settings.Default.CurrentRelease;
+            string ReleaseUpdate = Properties.Settings.Default.ReleaseUpdate;
 
             if (CurrentRelease != ReleaseUpdate)
             {
                 Properties.Settings.Default.ISUpdate = true;
                 Properties.Settings.Default.Save();
+                ShowVersion showVersion = new ShowVersion();
+                showVersion.ShowDialog();
             }
             else if (CurrentRelease == ReleaseUpdate)
             {

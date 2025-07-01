@@ -61,9 +61,10 @@ namespace NexusPDF.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public double ReleaseUpdate {
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ReleaseUpdate {
             get {
-                return ((double)(this["ReleaseUpdate"]));
+                return ((string)(this["ReleaseUpdate"]));
             }
             set {
                 this["ReleaseUpdate"] = value;
@@ -72,10 +73,10 @@ namespace NexusPDF.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public double CurrentRelease {
+        [global::System.Configuration.DefaultSettingValueAttribute("2.5.4")]
+        public string CurrentRelease {
             get {
-                return ((double)(this["CurrentRelease"]));
+                return ((string)(this["CurrentRelease"]));
             }
         }
         
