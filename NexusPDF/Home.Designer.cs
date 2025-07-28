@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Home));
             this.TabControl = new Guna.UI2.WinForms.Guna2TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.HomeTab = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.guna2GroupBox2 = new Guna.UI2.WinForms.Guna2GroupBox();
             this.drag = new Guna.UI2.WinForms.Guna2Panel();
@@ -55,6 +55,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.AIModele = new Guna.UI2.WinForms.Guna2ComboBox();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.PDFDataPanal = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
@@ -80,7 +81,6 @@
             this.UserName = new System.Windows.Forms.Label();
             this.AccountPic = new Guna.UI2.WinForms.Guna2CirclePictureBox();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.tabPage4 = new System.Windows.Forms.TabPage();
             this.TabControl.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.guna2GroupBox2.SuspendLayout();
@@ -108,7 +108,7 @@
             // TabControl
             // 
             this.TabControl.Alignment = System.Windows.Forms.TabAlignment.Left;
-            this.TabControl.Controls.Add(this.tabPage1);
+            this.TabControl.Controls.Add(this.HomeTab);
             this.TabControl.Controls.Add(this.tabPage2);
             this.TabControl.Controls.Add(this.tabPage4);
             this.TabControl.Controls.Add(this.tabPage3);
@@ -137,15 +137,15 @@
             this.TabControl.TabIndex = 0;
             this.TabControl.TabMenuBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(196)))), ((int)(((byte)(127)))));
             // 
-            // tabPage1
+            // HomeTab
             // 
-            this.tabPage1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(250)))), ((int)(((byte)(245)))));
-            this.tabPage1.Location = new System.Drawing.Point(184, 4);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1096, 643);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Home";
+            this.HomeTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(252)))), ((int)(((byte)(250)))), ((int)(((byte)(245)))));
+            this.HomeTab.Location = new System.Drawing.Point(184, 4);
+            this.HomeTab.Name = "HomeTab";
+            this.HomeTab.Padding = new System.Windows.Forms.Padding(3);
+            this.HomeTab.Size = new System.Drawing.Size(1096, 643);
+            this.HomeTab.TabIndex = 0;
+            this.HomeTab.Text = "Home";
             // 
             // tabPage2
             // 
@@ -540,6 +540,15 @@
             this.AIModele.Size = new System.Drawing.Size(326, 41);
             this.AIModele.TabIndex = 35;
             // 
+            // tabPage4
+            // 
+            this.tabPage4.Location = new System.Drawing.Point(184, 4);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Size = new System.Drawing.Size(1096, 643);
+            this.tabPage4.TabIndex = 3;
+            this.tabPage4.Text = "dddd";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.PDFDataPanal);
@@ -898,15 +907,6 @@
             this.ToolTip.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
             this.ToolTip.ToolTipTitle = "Nexus";
             // 
-            // tabPage4
-            // 
-            this.tabPage4.Location = new System.Drawing.Point(184, 4);
-            this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(1096, 643);
-            this.tabPage4.TabIndex = 3;
-            this.tabPage4.Text = "dddd";
-            this.tabPage4.UseVisualStyleBackColor = true;
-            // 
             // Home
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
@@ -951,7 +951,7 @@
         #endregion
 
         private Guna.UI2.WinForms.Guna2TabControl TabControl;
-        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage HomeTab;
         private System.Windows.Forms.TabPage tabPage2;
         private Guna.UI2.WinForms.Guna2GroupBox guna2GroupBox2;
         private Guna.UI2.WinForms.Guna2Panel drag;

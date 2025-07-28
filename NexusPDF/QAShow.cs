@@ -70,7 +70,12 @@ namespace NexusPDF
 
         private void NextQA_Click(object sender, EventArgs e)
         {
-            if(optionQuestions != null)
+            float Degre = (float)AI.counter;
+            string Degretxt = "Your Degre : " + Degre.ToString("F2");
+            string DegreWF = "";
+            if (Degre >= 60) DegreWF = "You Pass The Exam";
+            if (Degre < 60) DegreWF = "You Did Not Pass The Exam";
+            if (optionQuestions != null)
             {
                 if (currentQuestionIndex < optionQuestions.Count - 1)
                 {
@@ -81,6 +86,9 @@ namespace NexusPDF
                 else
                 {
                     NextQA.Text = "End Exam";
+                    MessageBox.Show(Degretxt, DegreWF, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    AI.counter = 0;
+                    this.Close();
                 }
             }
             else if (YesNoQuestions != null)
@@ -94,6 +102,9 @@ namespace NexusPDF
                 else
                 {
                     NextQA.Text = "End Exam";
+                    MessageBox.Show(Degretxt, DegreWF, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    AI.counter = 0;
+                    this.Close();
                 }
             }
         }
@@ -176,8 +187,8 @@ namespace NexusPDF
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            int Degre = (int)AI.counter;
-            label1.Text = "Your Degre : " + Degre.ToString();
+            float Degre = (float)AI.counter;
+            label1.Text = "Your Degre : " + Degre.ToString("F2");
             if (AI.counter == 100)
             {
                 label1.Text = "Your Degre : " + AI.counter;

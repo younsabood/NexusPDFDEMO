@@ -123,62 +123,88 @@ namespace NexusPDF
 
 
         public static string OptionsTemplateOnePDF = @"
-            [EXTRACTION DIRECTIVE]
-            GENERATE THE MAXIMUM POSSIBLE Questions minimum 20 in the pdf from " + SourceDocument + @".pdf.
-            You are functioning as an advanced academic assessment designer with expertise in " + ContentDomainPlaceholder + @".
-            FOCUS EXCLUSIVELY on substantive content in " + SourceDocument + @".pdf - ignore all metadata, front matter, indexes, appendices, and references.
-            if " + ContentDomainPlaceholder + @"  = ""Same As PDF"" You Need to extract the ContentDomain from pdf
-            [MANDATORY DIFFICULTY CALIBRATION: " + DifficultyPlaceholder + @"/10]
-            Difficulty spectrum:
-            - Level 1-2: Foundation undergraduate (core concepts, basic relationships)
-            - Level 3-4: Advanced undergraduate (application, initial analysis)
-            - Level 5-6: Masters-level graduate (complex analysis, synthesis)
-            - Level 7-8: Doctoral/research level (theoretical integration, methodological evaluation)
-            - Level 9-10: Expert practitioner/researcher (cutting-edge applications, theoretical contributions)
-            [DIFFICULTY ENFORCEMENT REQUIREMENT]
-            FORCE STRICT ADHERENCE TO THE SPECIFIED DIFFICULTY LEVEL (" + DifficultyPlaceholder + @"/10) - DO NOT PRODUCE ANY QUESTION WITH A LOWER DIFFICULTY LEVEL.
+    [EXTRACTION DIRECTIVE]
+    GENERATE THE MAXIMUM POSSIBLE Questions minimum 20 in the pdf from " + SourceDocument + @".pdf.
+    You are functioning as an advanced academic assessment designer with expertise in " + ContentDomainPlaceholder + @".
+    FOCUS EXCLUSIVELY on substantive content in " + SourceDocument + @".pdf - ignore all metadata, front matter, indexes, appendices, and references.
+    if " + ContentDomainPlaceholder + @"  = ""Same As PDF"" You Need to extract the ContentDomain from pdf
+    
+    [CRITICAL COMPREHENSIVE COVERAGE MANDATE]
+    EXTRACT questions from EVERY SIGNIFICANT CONCEPT, THEORY, PRINCIPLE, AND DETAIL in " + SourceDocument + @".pdf in an IMPORTANT AND DECISIVE WAY.
+    DO NOT UNDERESTIMATE ANY QUESTION - mention them ALL to ensure comprehensive coverage.
+    QUESTIONS MUST BE VERY COMPREHENSIVE - leave NO concept unexamined.
+    THERE SHOULD NOT BE ANY QUESTION LEFT OUT, otherwise the student will only study behind you and miss critical knowledge.
+    ENSURE that students cannot succeed by selective study - they must master the ENTIRE document content.
+    TREAT every subtopic, example, case study, methodology, and supporting detail as potentially examination-worthy.
+    CREATE a question bank so thorough that it represents the complete knowledge domain of " + SourceDocument + @".pdf.
+    [MANDATORY DIFFICULTY CALIBRATION: " + DifficultyPlaceholder + @"/10]
+    Difficulty spectrum:
+    - Level 1-2: Foundation undergraduate (core concepts, basic relationships)
+    - Level 3-4: Advanced undergraduate (application, initial analysis)
+    - Level 5-6: Masters-level graduate (complex analysis, synthesis)
+    - Level 7-8: Doctoral/research level (theoretical integration, methodological evaluation)
+    - Level 9-10: Expert practitioner/researcher (cutting-edge applications, theoretical contributions)
+    [DIFFICULTY ENFORCEMENT REQUIREMENT]
+    FORCE STRICT ADHERENCE TO THE SPECIFIED DIFFICULTY LEVEL (" + DifficultyPlaceholder + @"/10) - DO NOT PRODUCE ANY QUESTION WITH A LOWER DIFFICULTY LEVEL.
 
-            [COGNITIVE COMPLEXITY REQUIREMENTS]
-            For levels 1-2: Test comprehension and basic application of concepts.
-            For levels 3-4: Require thorough analysis and integration of related concepts.
-            For levels 5-6: Demand synthesis across multiple frameworks and evaluation of competing perspectives.
-            For levels 7-8: Necessitate critique of methodologies and theoretical reconciliation.
-            For levels 9-10: Require expert judgment on emergent applications and theoretical extensions.
+    [COGNITIVE COMPLEXITY REQUIREMENTS]
+    For levels 1-2: Test comprehension and basic application of concepts.
+    For levels 3-4: Require thorough analysis and integration of related concepts.
+    For levels 5-6: Demand synthesis across multiple frameworks and evaluation of competing perspectives.
+    For levels 7-8: Necessitate critique of methodologies and theoretical reconciliation.
+    For levels 9-10: Require expert judgment on emergent applications and theoretical extensions.
 
-            [NON-NEGOTIABLE QUESTION FORMULATION REQUIREMENTS]
-            1. GENERATE THE MAXIMUM POSSIBLE Questions  minimum 20 in the pdf with content extracted directly from " + SourceDocument + @".pdf.
-            2. EACH question MUST include EXACTLY 4 options (A-D) with only ONE correct answer supported by " + SourceDocument + @".pdf content.
-            3. ALL distractors MUST be plausible and based on common misconceptions from " + SourceDocument + @".pdf content.
-            4. DISTRIBUTE correct answers EVENLY across options A, B, C, and D.
-            5. INCLUDE a detailed 'source' field with specific evidence from " + SourceDocument + @".pdf (Page X).
-            6. PROVIDE comprehensive 'explanation' that offers a rationale for the correct answer and analysis of distractors.
-            7. ENSURE questions distribute evenly across sections in " + SourceDocument + @".pdf.
-            8. ALL options MUST be relevant and derived from " + SourceDocument + @".pdf content.
+    [NON-NEGOTIABLE QUESTION FORMULATION REQUIREMENTS]
+    1. GENERATE THE MAXIMUM POSSIBLE Questions  minimum 20 in the pdf with content extracted directly from " + SourceDocument + @".pdf.
+    2. EACH question MUST include EXACTLY 4 options (A-D) with only ONE correct answer supported by " + SourceDocument + @".pdf content.
+    3. ALL distractors MUST be plausible and based on common misconceptions from " + SourceDocument + @".pdf content.
+    4. DISTRIBUTE correct answers EVENLY across options A, B, C, and D.
+    5. INCLUDE a detailed 'source' field with specific evidence from " + SourceDocument + @".pdf (Page X).
+    6. PROVIDE comprehensive 'explanation' that offers a rationale for the correct answer and analysis of distractors.
+    7. STRIVE to distribute questions evenly across substantive sections of " + SourceDocument + @".pdf, prioritizing content density where sections vary significantly in length or importance.
+    8. ALL options MUST be relevant and derived from " + SourceDocument + @".pdf content.
+    9. INCORPORATE negative and exclusion questions (approximately 20-30% of total questions) using formats such as:
+       - ""Which of the following does NOT belong to [concept/category]?""
+       - ""Which of the following is NOT true about [topic]?""
+       - ""All of the following are characteristics of [concept] EXCEPT:""
+       - ""Which statement is INCORRECT regarding [topic]?""
+    10. ENSURE negative questions are clearly marked with capitalized negation words (NOT, EXCEPT, INCORRECT) to avoid confusion.
 
-            [MANDATORY OUTPUT FORMAT]
-            The answer ONE Option
-            Return a valid, parseable JSON array with objects formatted PRECISELY as:
-            [
-                {
-                ""question"": ""Precise, unambiguous question requiring subject mastery"",
-                ""answer"": ""Option A|Option B|Option C|Option D"",
-                ""options"": [
-                  ""Option A: well-crafted response with disciplinary precision based on " + SourceDocument + @".pdf content"",
-                  ""Option B: well-crafted response with disciplinary precision based on " + SourceDocument + @".pdf content"",
-                  ""Option C: well-crafted response with disciplinary precision based on " + SourceDocument + @".pdf content"",
-                  ""Option D: well-crafted response with disciplinary precision based on " + SourceDocument + @".pdf content""
-                ],
-                ""source"": " + SourceDocument + @".pdf (Page X)"",
-                ""explanation"": ""Comprehensive rationale derived from  " + SourceDocument + @".pdf"",
-                ""difficulty"": """ + DifficultyPlaceholder + @"/10"",
-                ""domain"": """ + ContentDomainPlaceholder + @"""
-                }
-            ]
+    [CRITICAL DISTRACTOR REQUIREMENTS - UNIVERSITY EXAM STANDARD]
+    11. CONSTRUCT distractors that are EXTREMELY SIMILAR to the correct answer - use subtle variations in terminology, numerical values, or conceptual relationships.
+    12. ENSURE incorrect options are NOT obviously wrong - they should represent plausible alternative interpretations or common expert-level misconceptions.
+    13. MAKE all options structurally and linguistically parallel with equivalent complexity and detail.
+    14. AVOID distractors that are clearly unrelated, absurd, or easily eliminated through basic logic.
+    15. DESIGN questions that would challenge advanced students who have thoroughly studied the material.
+    16. CREATE options that require deep understanding to distinguish - surface-level knowledge should NOT be sufficient to identify the correct answer.
+    17. ENSURE the question text does NOT contain clues, hints, or terminology that would allow students to deduce the correct answer without substantive knowledge.
+    18. AVOID embedding answer cues within the question stem - students must rely on their understanding of the content, not textual analysis or elimination strategies.
 
-            [LANGUAGE AND STYLISTIC REQUIREMENTS]
-            PRODUCE ALL content in " + LanguagePlaceholder + @".
-            MAINTAIN field-appropriate academic terminology and conventions consistent with " + ContentDomainPlaceholder + @".
-            ";
+    [MANDATORY OUTPUT FORMAT]
+    The answer ONE Option
+    Return a valid, parseable JSON array with objects formatted PRECISELY as:
+    [
+        {
+        ""question"": ""Precise, unambiguous question requiring subject mastery and deep analytical thinking"",
+        ""answer"": ""Option A|Option B|Option C|Option D"",
+        ""options"": [
+          ""Option A: The rest of the answers should be very similar to the correct answer, so the answer should not be obvious based on " + SourceDocument + @".pdf content"",
+          ""Option B: The rest of the answers should be very similar to the correct answer, so the answer should not be obvious based on " + SourceDocument + @".pdf content"",
+          ""Option C: The rest of the answers should be very similar to the correct answer, so the answer should not be obvious based on " + SourceDocument + @".pdf content"",
+          ""Option D: The rest of the answers should be very similar to the correct answer, so the answer should not be obvious based on " + SourceDocument + @".pdf content""
+        ],
+        ""source"": " + SourceDocument + @".pdf (Page X)"",
+        ""explanation"": ""Comprehensive rationale derived from  " + SourceDocument + @".pdf with detailed analysis of why distractors are incorrect"",
+        ""difficulty"": """ + DifficultyPlaceholder + @"/10"",
+        ""domain"": """ + ContentDomainPlaceholder + @"""
+        }
+    ]
+
+    [LANGUAGE AND STYLISTIC REQUIREMENTS]
+    PRODUCE ALL content in " + LanguagePlaceholder + @".
+    MAINTAIN field-appropriate academic terminology and conventions consistent with " + ContentDomainPlaceholder + @".
+    ENSURE questions reflect the rigor and complexity expected in university-level examinations.
+    ";
 
         public static string OptionsTemplateTwoPDF = @"
             [DOCUMENT HANDLING]

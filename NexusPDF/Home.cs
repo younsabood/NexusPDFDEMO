@@ -84,6 +84,13 @@ namespace NexusPDF
             try
             {
                 await LoadUserDataAsync();
+                string json = await UrlContentReader.ReadContentFromUrlAsync(Api.Release);
+                version version = new version
+                {
+                    Json = json
+                };
+                version.Dock = DockStyle.Fill;
+                HomeTab.Controls.Add(version);
             }
             catch (Exception ex)
             {

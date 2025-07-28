@@ -70,7 +70,8 @@ namespace NexusPDF
                 // Create and add WebView2 control
                 webView = new WebView2 { Dock = DockStyle.Fill };
                 this.Controls.Add(webView);
-
+                webView.Padding = new Padding(0,0,0, 0);
+                webView.Margin = new Padding(0, 0, 0, 0);
                 // Ensure user data folder exists
                 if (!Directory.Exists(userDataFolder))
                 {
