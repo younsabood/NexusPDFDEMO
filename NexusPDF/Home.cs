@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using GenerativeAI.Types;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace NexusPDF
@@ -701,7 +702,7 @@ namespace NexusPDF
                                 !AI.CancellationToken.IsCancellationRequested &&
                                 currentOperationId == operationId)
                             {
-                                ProcessResponse(mergedJson, operationId);
+                                _ = ProcessResponse(mergedJson, operationId);
                             }
                         }
                     }
@@ -835,6 +836,8 @@ namespace NexusPDF
                 Next.Enabled = false;
                 ResetImage.Enabled = false;
                 Cancel.Enabled = false;
+                string originalPdfName = Path.GetFileNameWithoutExtension(Path_1.Text);
+                QAPDF.GeneratePdfDocument(response, originalPdfName);
 
                 if (type.SelectedIndex != 4)
                 {
@@ -844,7 +847,6 @@ namespace NexusPDF
                 }
                 else
                 {
-                    string originalPdfName = Path.GetFileNameWithoutExtension(Path_1.Text);
                     var aShow = new FlashCards(response, originalPdfName);
                     await StorePdfAsync(Path_1.Text, originalPdfName);
                     aShow.Show();
