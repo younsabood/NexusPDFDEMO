@@ -62,8 +62,8 @@
     <Reference Include="DocumentFormat.OpenXml.Framework, Version=3.3.0.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
       <HintPath>..\packages\DocumentFormat.OpenXml.Framework.3.3.0\lib\net46\DocumentFormat.OpenXml.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="GenerativeAI, Version=2.7.0.0, Culture=neutral, PublicKeyToken=125a6b2231c8ea71, processorArchitecture=MSIL">
-      <HintPath>..\packages\Google_GenerativeAI.2.7.0\lib\net462\GenerativeAI.dll</HintPath>
+    <Reference Include="GenerativeAI, Version=3.2.0.0, Culture=neutral, PublicKeyToken=125a6b2231c8ea71, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google_GenerativeAI.3.2.0\lib\net462\GenerativeAI.dll</HintPath>
     </Reference>
     <Reference Include="Guna.UI2, Version=2.0.4.6, Culture=neutral, PublicKeyToken=8b9d14aa5142e261, processorArchitecture=MSIL">
       <HintPath>..\packages\Ububox.G2Crack.2.0.4.6\lib\net472\Guna.UI2.dll</HintPath>
