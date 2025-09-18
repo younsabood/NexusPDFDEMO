@@ -15,6 +15,7 @@ namespace NexusPDF
         public static string AIModels;
         public static GeminiModel GeminiModel;
         public static string LanguageAI;
+        public static string Template;
         private static CancellationTokenSource _cancellationTokenSource;
         private static CancellationToken _cancellationToken;
         private static int _operationId = 0;
@@ -113,6 +114,7 @@ namespace NexusPDF
 
         private static string GetTemplate(string type, bool hasExample)
         {
+            Template = type;
             switch (type)
             {
                 case "Yes No Questions":

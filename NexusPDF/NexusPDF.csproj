@@ -293,6 +293,18 @@
     <Compile Include="Home.Designer.cs">
       <DependentUpon>Home.cs</DependentUpon>
     </Compile>
+    <Compile Include="HtmlMultipleChoiceCode.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="HtmlMultipleChoiceCode.Designer.cs">
+      <DependentUpon>HtmlMultipleChoiceCode.cs</DependentUpon>
+    </Compile>
+    <Compile Include="HtmlMultipleChoiceMath.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="HtmlMultipleChoiceMath.Designer.cs">
+      <DependentUpon>HtmlMultipleChoiceMath.cs</DependentUpon>
+    </Compile>
     <Compile Include="IPLocationService.cs" />
     <Compile Include="JsonExtractorFlashCards.cs" />
     <Compile Include="PdfSplitter.cs" />
@@ -373,6 +385,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="HtmlMultipleChoice.resx">
       <DependentUpon>HtmlMultipleChoice.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="HtmlMultipleChoiceMath.resx">
+      <DependentUpon>HtmlMultipleChoiceMath.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LoginPage.resx">
       <DependentUpon>LoginPage.cs</DependentUpon>

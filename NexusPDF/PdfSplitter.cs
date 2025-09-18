@@ -17,7 +17,7 @@ namespace NexusPDF
         public static List<string> SplitPdfEveryNPages(string inputPdfPath)
         {
             List<string> outputPaths = new List<string>();
-            int pagesPerSplit = 5;
+            int pagesPerSplit = 20;
             string outputDirectory = AppDomain.CurrentDomain.BaseDirectory;
             // Combine the base directory with the "temppdf" folder
             string tempPdfDirectory = Path.Combine(outputDirectory, "TempPDF");

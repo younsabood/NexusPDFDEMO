@@ -324,10 +324,10 @@ namespace NexusPDF
         ""question"": ""Precise, unambiguous math question requiring subject mastery from " + SourceDocument + @".pdf"",
         ""answer"": ""Option A|Option B|Option C|Option D"",
         ""options"": [
-          ""Option A: well-crafted mathematical response with disciplinary precision based on " + SourceDocument + @".pdf content"",
-          ""Option B: well-crafted mathematical response with disciplinary precision based on " + SourceDocument + @".pdf content"",
-          ""Option C: well-crafted mathematical response with disciplinary precision based on " + SourceDocument + @".pdf content"",
-          ""Option D: well-crafted mathematical response with disciplinary precision based on " + SourceDocument + @".pdf content""
+          ""Option A: Mathematically precise response"",
+          ""Option B: Alternative plausible mathematical response"",
+          ""Option C: Common mathematical misconception"",
+          ""Option D: Partial mathematical understanding""
         ],
         ""source"": ""Direct textual evidence extracted from " + SourceDocument + @".pdf (Page X)"",
         ""explanation"": ""Comprehensive academic rationale for the correct answer and analysis of each distractor, all derived from " + SourceDocument + @".pdf math content"",

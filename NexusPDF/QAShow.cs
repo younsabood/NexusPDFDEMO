@@ -9,6 +9,9 @@ namespace NexusPDF
     public partial class QAShow : Form
     {
         private HtmlMultipleChoice htmlQuestion;
+        private HtmlMultipleChoiceCode htmlQuestionCode;
+        private HtmlMultipleChoiceMath htmlQuestionMath;
+
         private List<OptionQuestion> optionQuestions;
         private List<YesNoQuestion> YesNoQuestions;
         private int currentQuestionIndex = 0;
@@ -129,20 +132,59 @@ namespace NexusPDF
                         : option.Trim());
                 }
 
-                // Initialize HTML question component
-                HtmlMultipleChoice.numOfOption = opts;
-                htmlQuestion = new HtmlMultipleChoice
+                if(AI.Template == "Math Multiple Choice")
                 {
-                    QuestionText = question,
-                    Options = processedOptions.ToArray(),
-                    CorrectAnswer = correctAnswer,
-                    Explanation = Explanation,
-                    Difficulty = Difficulty,
-                    Source = Source
-                };
-                htmlQuestion.QAencrement = (100) / (QAcount);
-                htmlQuestion.Dock = DockStyle.Top;
-                exam.Controls.Add(htmlQuestion);
+                    MessageBox.Show(correctAnswer);
+                    // Initialize HTML question component
+                    HtmlMultipleChoiceMath.numOfOption = opts;
+                    htmlQuestionMath = new HtmlMultipleChoiceMath
+                    {
+                        QuestionText = question,
+                        Options = processedOptions.ToArray(),
+                        CorrectAnswer = correctAnswer,
+                        Explanation = Explanation,
+                        Difficulty = Difficulty,
+                        Source = Source
+                    };
+                    htmlQuestionMath.QAencrement = (100) / (QAcount);
+                    htmlQuestionMath.Dock = DockStyle.Top;
+                    exam.Controls.Add(htmlQuestionMath);
+                }
+                else if(AI.Template == "Programming Multiple Choice")
+                {
+                    // Initialize HTML question component
+                    HtmlMultipleChoiceCode.numOfOption = opts;
+                    htmlQuestionCode = new HtmlMultipleChoiceCode
+                    {
+                        QuestionText = question,
+                        Options = processedOptions.ToArray(),
+                        CorrectAnswer = correctAnswer,
+                        Explanation = Explanation,
+                        Difficulty = Difficulty,
+                        Source = Source
+                    };
+                    htmlQuestionCode.QAencrement = (100) / (QAcount);
+                    htmlQuestionCode.Dock = DockStyle.Top;
+                    exam.Controls.Add(htmlQuestionCode);
+                }
+                else
+                {
+                    // Initialize HTML question component
+                    HtmlMultipleChoice.numOfOption = opts;
+                    htmlQuestion = new HtmlMultipleChoice
+                    {
+                        QuestionText = question,
+                        Options = processedOptions.ToArray(),
+                        CorrectAnswer = correctAnswer,
+                        Explanation = Explanation,
+                        Difficulty = Difficulty,
+                        Source = Source
+                    };
+                    htmlQuestion.QAencrement = (100) / (QAcount);
+                    htmlQuestion.Dock = DockStyle.Top;
+                    exam.Controls.Add(htmlQuestion);
+                }
+
             }
             catch (Exception ex)
             {
