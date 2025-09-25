@@ -817,6 +817,21 @@ namespace NexusPDF
 
         private async Task ProcessResponse(string response, string operationId)
         {
+            string originalPdfName = Path.GetFileNameWithoutExtension(Path_1.Text);
+            string outputDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string tempPdfDirectory = Path.Combine(outputDirectory, "TempPDF");
+            string pdfSpecificDirectory = Path.Combine(tempPdfDirectory, originalPdfName);
+
+            // إضافة هذه الأسطر للتحقق من وجود المجلد وإنشائه إذا لزم الأمر
+            if (!Directory.Exists(pdfSpecificDirectory))
+            {
+                Directory.CreateDirectory(pdfSpecificDirectory);
+            }
+
+            string fileName = originalPdfName + ".json";
+            string fullPath = Path.Combine(pdfSpecificDirectory, fileName);
+            File.WriteAllText(fullPath, response);
+
             // Critical check: Only process if this is still the current operation
             lock (lockObject)
             {
@@ -836,7 +851,6 @@ namespace NexusPDF
                 Next.Enabled = false;
                 ResetImage.Enabled = false;
                 Cancel.Enabled = false;
-                string originalPdfName = Path.GetFileNameWithoutExtension(Path_1.Text);
                 QAPDF.GeneratePdfDocument(response, originalPdfName);
 
                 if (type.SelectedIndex != 4)

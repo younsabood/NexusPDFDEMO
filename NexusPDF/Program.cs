@@ -47,15 +47,6 @@ namespace NexusPDF
         {
             try
             {
-                if (!IPLocationService.IsInternetAvailable())
-                {
-                    ShowErrorMessage(
-                        "Internet connection is required to run this application. Please check your connection and try again.",
-                        "No Internet Connection");
-                    Environment.Exit(0);
-                    return;
-                }
-
                 var (publicIp, country, isBanned) = await IPLocationService.GetIpCountryAndBannedStatus();
 
                 if (isBanned)
