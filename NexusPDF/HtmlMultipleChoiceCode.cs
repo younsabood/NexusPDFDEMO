@@ -7,6 +7,8 @@ using System.IO;
 using GenerativeAI.Types;
 using System.Text.RegularExpressions;
 using System.Web.UI.WebControls;
+using System.Security;
+using System.Collections.Generic;
 
 namespace NexusPDF
 {
@@ -223,11 +225,12 @@ namespace NexusPDF
         {
             try
             {
+                string formattedOptionText = FormatCodeMarkdown(_options[index]);
                 return $@"
     <label class='option' for='option{index}'>
-        <input type='radio' name='answer' id='option{index}' value='{_options[index]}'>
+        <input type='radio' name='answer' id='option{index}' value='{SecurityElement.Escape(_options[index])}'>
         <span class='radio-custom'></span>
-        <span class='option-text' data-content='{_options[index]}' data-index='{index}'>{_options[index]}</span>
+        <span class='option-text'>{formattedOptionText}</span>
     </label>";
             }
             catch (Exception ex)
@@ -237,11 +240,68 @@ namespace NexusPDF
             }
         }
 
+        /// <summary>
+        /// Converts markdown for code blocks (```) and inline code (`) into HTML tags (<pre><code> and <code>).
+        /// This method safely escapes content to prevent HTML injection.
+        /// </summary>
+        /// <param name="text">The raw text possibly containing markdown for code.</param>
+        /// <returns>A string with markdown converted to HTML.</returns>
+        private string FormatCodeMarkdown(string text)
+        {
+            if (string.IsNullOrEmpty(text)) return "";
+            var htmlBlocks = new List<string>();
+            string placeholderPrefix = $"__CODE_PLACEHOLDER_{Guid.NewGuid()}__";
+
+            // 1. Process block code ```...``` and replace with placeholders
+            text = new Regex(@"```(\w*)\r?\n([\s\S]+?)\r?\n```").Replace(text, match => {
+                string lang = match.Groups[1].Value;
+                string code = match.Groups[2].Value;
+
+                // If no language is specified, default to 'none' for Prism to handle as plain text.
+                if (string.IsNullOrEmpty(lang))
+                {
+                    lang = "none";
+                }
+
+                string escapedCode = SecurityElement.Escape(code.Trim());
+                // Prism.js uses the class "language-xxxx" for highlighting.
+                string html = $"<pre><code class=\"language-{lang}\">{escapedCode}</code></pre>";
+                htmlBlocks.Add(html);
+                return $"{placeholderPrefix}{htmlBlocks.Count - 1}";
+            });
+
+            // 2. Process inline code `...` and replace with placeholders
+            text = new Regex(@"`([^`\n]+?)`").Replace(text, match => {
+                string code = match.Groups[1].Value;
+                string escapedCode = SecurityElement.Escape(code);
+                string html = $"<code>{escapedCode}</code>";
+                htmlBlocks.Add(html);
+                return $"{placeholderPrefix}{htmlBlocks.Count - 1}";
+            });
+
+            // 3. Escape the rest of the text to prevent any remaining HTML from rendering
+            text = SecurityElement.Escape(text);
+
+            // 4. Put the pristine HTML blocks back into the escaped text
+            for (int i = 0; i < htmlBlocks.Count; i++)
+            {
+                string escapedPlaceholder = SecurityElement.Escape($"{placeholderPrefix}{i}");
+                text = text.Replace(escapedPlaceholder, htmlBlocks[i]);
+            }
+
+            return text;
+        }
+
+
         private void RenderHtml()
         {
             try
             {
                 if (webView?.CoreWebView2 == null || _options == null || _correctAnswer == null) return;
+
+                string formattedQuestion = FormatCodeMarkdown(QuestionText);
+                string formattedCorrectAnswer = FormatCodeMarkdown(CorrectAnswer);
+                string formattedExplanation = FormatCodeMarkdown(Explanation);
 
                 var html = $@"
                <!DOCTYPE html>
@@ -250,17 +310,7 @@ namespace NexusPDF
                     <meta charset='UTF-8'>
                     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
                     <title>Flashcard MCQ</title>
-                    <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css'>
-                    <script src='//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js'></script>
-                    <script src='//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js'></script>
-                    <script src='//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js'></script>
-                    <script src='//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js'></script>
-                    <script src='//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/xml.min.js'></script>
-                    <script src='//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js'></script>
-                    <script src='//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js'></script>
-                    <script src='//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js'></script>
-                    <script src='//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/css.min.js'></script>
-                    <script src='//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js'></script>
+                    <link rel='stylesheet' href='[https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css](https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css)'>
                     <style>
                         {GetNewStyles()}
                     </style>
@@ -270,7 +320,7 @@ namespace NexusPDF
                         <div class='card'>
                             <div class='card-face card-front'>
                                 <div class='question' id='questionContainer'>
-                                    <div class='question-content' data-content='{QuestionText}'>{QuestionText}</div>
+                                    <div class='question-content'>{formattedQuestion}</div>
                                 </div>
                                 <div class='options'>
                                 {(numOfOption > 2 ? GenerateOptions(4) : GenerateOptions(2))}
@@ -278,8 +328,8 @@ namespace NexusPDF
                                 <button class='flip-btn' onclick='flipCard()'>Check Answer</button>
                             </div>
                             <div class='card-face card-back'>
-                                <div class='correct-answer' data-content='{CorrectAnswer}'>{CorrectAnswer}</div>
-                                <div class='explanation-text' data-content='{Explanation}'>{Explanation}</div>
+                                <div class='correct-answer'>{formattedCorrectAnswer}</div>
+                                <div class='explanation-text'>{formattedExplanation}</div>
                                 <hr style=""height:2px;border-width:0;color:gray;background-color:gray"">
                                 <div class='source-text' onclick='openPdfDirectory()' title='Click to open PDF directory'>{Source}</div>
                                 <div class='difficulty-box'>{Difficulty}</div>
@@ -287,133 +337,17 @@ namespace NexusPDF
                             </div>
                         </div>
                     </div>
+                    <script src='[https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js](https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js)'></script>
+                    <script src='[https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js](https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js)'></script>
                     <script>
-                        // Enhanced code detection function
-                        function isLikelyCode(text) {{
-                            if (!text || typeof text !== 'string') return false;
-                            
-                            // Clean the text
-                            const cleanText = text.trim();
-                            if (cleanText.length < 5) return false;
-                            
-                            // Common code patterns
-                            const codePatterns = [
-                                // Programming language keywords
-                                /\b(function|class|interface|public|private|protected|static|void|int|string|bool|char|float|double|var|let|const|if|else|for|while|do|switch|case|default|return|import|export|namespace|using|include)\b/gi,
-                                
-                                // Common operators and syntax
-                                /[{{}}();[\]]/,
-                                /[=!<>]+[=]/,
-                                /\+\+|--|&&|\|\||::|->|=>/,
-                                
-                                // Method calls and properties
-                                /\w+\.\w+\(/,
-                                /\w+\[\w*\]/,
-                                
-                                // HTML/XML tags
-                                /<[^>]+>/,
-                                
-                                // SQL keywords
-                                /\b(SELECT|FROM|WHERE|INSERT|UPDATE|DELETE|CREATE|ALTER|DROP|TABLE|DATABASE)\b/gi,
-                                
-                                // JSON structure
-                                /^\s*[{{[][\s\S]*[}}\]]\s*$/,
-                                
-                                // Comments
-                                /\/\/|\/\*|\*\/|#|<!--|-->/,
-                                
-                                // String literals with quotes
-                                /[""'].*[""']/,
-                                
-                                // URLs or paths
-                                /https?:\/\/|file:\/\/|\w+:\/\w+/i,
-                                
-                                // Code-like formatting (multiple lines with indentation)
-                                /\n\s+\w+/
-                            ];
-                            
-                            // Check for code patterns
-                            let codeScore = 0;
-                            codePatterns.forEach(pattern => {{
-                                if (pattern.test(cleanText)) {{
-                                    codeScore++;
-                                }}
-                            }});
-                            
-                            // Additional scoring
-                            // Multiple lines with consistent indentation
-                            const lines = cleanText.split('\n');
-                            if (lines.length > 2) {{
-                                const indentedLines = lines.filter(line => /^\s+/.test(line));
-                                if (indentedLines.length > lines.length * 0.3) {{
-                                    codeScore += 2;
-                                }}
-                            }}
-                            
-                            // High ratio of special characters
-                            const specialCharCount = (cleanText.match(/[{{}}();[\]=<>!&|+\-*\/]/g) || []).length;
-                            const specialCharRatio = specialCharCount / cleanText.length;
-                            if (specialCharRatio > 0.1) {{
-                                codeScore++;
-                            }}
-                            
-                            // Check for camelCase or snake_case
-                            if (/\b[a-z]+[A-Z][a-zA-Z]*\b/.test(cleanText) || /\b\w+_\w+\b/.test(cleanText)) {{
-                                codeScore++;
-                            }}
-                            
-                            return codeScore >= 2;
-                        }}
+                        document.addEventListener('DOMContentLoaded', () => {{
+                            // C# now pre-formats the HTML with <pre><code class='language-xxx'> blocks,
+                            // so we just need to tell Prism.js to find and style them.
+                            Prism.highlightAll();
+                        }});
                         
-                        function processContent(element) {{
-                            const content = element.getAttribute('data-content');
-                            if (!content) return;
-                            
-                            if (isLikelyCode(content)) {{
-                                // Create code block
-                                const pre = document.createElement('pre');
-                                const code = document.createElement('code');
-                                code.textContent = content;
-                                pre.appendChild(code);
-                                
-                                // Clear element and add code block
-                                element.innerHTML = '';
-                                element.appendChild(pre);
-                            }} else {{
-                                // Keep as regular text but ensure proper formatting
-                                element.innerHTML = content.replace(/\n/g, '<br>');
-                            }}
-                        }}
-                        
-                        function highlightAllCode() {{
-                            // Process question
-                            const questionContent = document.querySelector('.question-content');
-                            if (questionContent) {{
-                                processContent(questionContent);
-                            }}
-                            
-                            // Process options
-                            document.querySelectorAll('.option-text').forEach(processContent);
-                            
-                            // Process correct answer
-                            const correctAnswer = document.querySelector('.correct-answer');
-                            if (correctAnswer) {{
-                                processContent(correctAnswer);
-                            }}
-                            
-                            // Process explanation
-                            const explanation = document.querySelector('.explanation-text');
-                            if (explanation) {{
-                                processContent(explanation);
-                            }}
-                            
-                            // Apply syntax highlighting
-                            hljs.highlightAll();
-                        }}
-                        
-                        document.addEventListener('DOMContentLoaded', highlightAllCode);
-                        
-                        const correctAnswer = '{CorrectAnswer}'.trim().toLowerCase();
+                        const correctAnswerRaw = `{SecurityElement.Escape(CorrectAnswer)}`;
+                        const correctAnswer = correctAnswerRaw.trim().toLowerCase();
 
                         function flipCard() {{
                             const selected = document.querySelector('input[name=""answer""]:checked');
@@ -983,3 +917,4 @@ namespace NexusPDF
         }
     }
 }
+

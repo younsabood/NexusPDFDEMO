@@ -11,6 +11,7 @@ using NexusPDF;
 using DocumentFormat.OpenXml.Drawing.Charts;
 using System.Web.UI.WebControls;
 using Word = Microsoft.Office.Interop.Word;
+using System.Linq;
 
 namespace NexusPDF
 {
@@ -219,20 +220,6 @@ namespace NexusPDF
             return optionsHtml;
         }
 
-        // Helper function to clean and normalize text for comparison
-        private string NormalizeText(string text)
-        {
-            if (string.IsNullOrEmpty(text)) return "";
-
-            return text.Trim()
-                      .Replace("\\", "\\\\") // Escape backslashes for JavaScript
-                      .Replace("'", "\\'")   // Escape single quotes
-                      .Replace("\"", "\\\"") // Escape double quotes
-                      .Replace("\r\n", "\\n")
-                      .Replace("\n", "\\n")
-                      .Replace("\r", "\\n");
-        }
-
         private string GenerateOptionHtml(int index)
         {
             try
@@ -240,13 +227,12 @@ namespace NexusPDF
                 if (_options == null || index >= _options.Length) return "";
 
                 var optionText = _options[index] ?? "";
-                var normalizedOption = NormalizeText(optionText);
 
                 return $@"
     <label class='option' for='option{index}'>
-        <input type='radio' name='answer' id='option{index}' value='{normalizedOption}' data-original-value='{optionText.Replace("'", "&#39;").Replace("\"", "&quot;")}'>
+        <input type='radio' name='answer' id='option{index}' value='{index}'>
         <span class='radio-custom'></span>
-        <span class='option-text tex2jax_process' data-index='{index}'>{optionText}</span>
+        <span class='option-text tex2jax_process'>{optionText}</span>
     </label>";
             }
             catch (Exception ex)
@@ -262,7 +248,14 @@ namespace NexusPDF
             {
                 if (webView?.CoreWebView2 == null || _options == null || _correctAnswer == null) return;
 
-                var normalizedCorrectAnswer = NormalizeText(_correctAnswer);
+                // Find the index of the correct answer. This is more reliable than string comparison.
+                int correctAnswerIndex = -1;
+                if (_options != null)
+                {
+                    // Use Trim() for a more robust comparison
+                    correctAnswerIndex = Array.FindIndex(_options, option => option.Trim() == _correctAnswer.Trim());
+                }
+
 
                 var html = $@"
 <!DOCTYPE html>
@@ -278,35 +271,19 @@ namespace NexusPDF
             tex: {{
                 inlineMath: [['$', '$'], ['\\(', '\\)']],
                 displayMath: [['$$', '$$'], ['\\[', '\\]']],
-                processEscapes: true,
-                processEnvironments: true,
-                packages: {{'{{ [+] }}'': ['ams', 'amssymb', 'amsmath', 'physics', 'mhchem', 'cancel', 'color', 'bbox', 'xcolor']}},
-                tags: 'ams',
-                tagSide: 'right',
-                tagIndent: '.8em',
-                multlineWidth: '85%'
-            }},
-            chtml: {{
-                scale: 1.2,
-                minScale: 0.8,
-                maxScale: 2.0,
-                displayAlign: 'center',
-                displayIndent: '0',
-                matchFontHeight: true,
-                exFactor: 0.5
+                processEscapes: true
             }},
             options: {{
-                enableMenu: false,
                 skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
                 ignoreHtmlClass: 'tex2jax_ignore',
                 processHtmlClass: 'tex2jax_process'
             }},
             startup: {{
-                typeset: false,
                 ready() {{
                     MathJax.startup.defaultReady();
                     MathJax.startup.promise.then(() => {{
-                        console.log('MathJax is ready');
+                        console.log('MathJax is ready, initial typesetting...');
+                        MathJax.typesetPromise();
                     }});
                 }}
             }}
@@ -342,134 +319,60 @@ namespace NexusPDF
     </div>
     
     <script>
-        let mathInitialized = false;
-        const CORRECT_ANSWER = '{normalizedCorrectAnswer}';
+        const CORRECT_ANSWER_INDEX = {correctAnswerIndex};
         
-        // Function to normalize text for comparison
-        function normalizeForComparison(text) {{
-            if (!text) return '';
-            return text.toString().trim();
-        }}
-        
-        function initializeMath() {{
-            try {{
-                if (window.MathJax && window.MathJax.typesetPromise) {{
-                    window.MathJax.typesetPromise().then(() => {{
-                        console.log('MathJax rendering completed');
-                        mathInitialized = true;
-                    }}).catch((err) => {{
-                        console.error('MathJax error:', err);
-                        // Try again after a short delay
-                        setTimeout(initializeMath, 1000);
-                    }});
-                }} else {{
-                    console.log('MathJax not ready, retrying...');
-                    setTimeout(initializeMath, 500);
-                }}
-            }} catch (error) {{
-                console.error('Math initialization error:', error);
-                setTimeout(initializeMath, 1000);
-            }}
-        }}
-        
-        // Wait for libraries to load before initializing
-        document.addEventListener('DOMContentLoaded', function() {{
-            // Wait longer to ensure MathJax is loaded
-            setTimeout(initializeMath, 300);
-        }});
-
-        // Render math again when flipping the card
+        // Render math again when flipping the card to ensure back face is rendered.
         function flipCard() {{
             const selected = document.querySelector('input[name=""answer""]:checked');
             if (!selected) {{
-                // Use a message box instead of alert
-                let messageBox = document.createElement('div');
-                messageBox.innerHTML = 'يرجى اختيار إجابة أولاً';
-                messageBox.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: #fff; border: 2px solid #a68640; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); z-index: 1000; text-align: center; font-size: 1.2rem;';
-                document.body.appendChild(messageBox);
-                setTimeout(() => {{ document.body.removeChild(messageBox); }}, 2000);
+                alert('يرجى اختيار إجابة أولاً');
                 return;
             }}
 
-            const options = document.querySelectorAll('.option');
+            const selectedIndex = parseInt(selected.value, 10);
             
-            // Reset all styles first
-            options.forEach(option => {{
-                option.classList.remove('correct', 'incorrect');
-            }});
-
-            // Find and highlight the correct answer
-            let correctOptionFound = false;
-            options.forEach(option => {{
-                const input = option.querySelector('input');
-                const inputValue = normalizeForComparison(input.value);
-                const originalValue = normalizeForComparison(input.getAttribute('data-original-value'));
-                const correctAnswerNormalized = normalizeForComparison(CORRECT_ANSWER);
-                
-                console.log('Comparing:', {{
-                    inputValue: inputValue,
-                    originalValue: originalValue,
-                    correctAnswer: correctAnswerNormalized
-                }});
-                
-                // Compare with both values
-                if (inputValue === correctAnswerNormalized || originalValue === correctAnswerNormalized) {{
-                    option.classList.add('correct');
-                    correctOptionFound = true;
-                }}
-            }});
-
-            // Highlight the selected incorrect answer
-            const selectedValue = normalizeForComparison(selected.value);
-            const selectedOriginalValue = normalizeForComparison(selected.getAttribute('data-original-value'));
-            const correctAnswerNormalized = normalizeForComparison(CORRECT_ANSWER);
-            
-            const isCorrect = selectedValue === correctAnswerNormalized || selectedOriginalValue === correctAnswerNormalized;
-            
-            if (!isCorrect) {{
-                const incorrectOption = selected.closest('.option');
-                incorrectOption.classList.add('incorrect');
+            // Highlight the correct option
+            const correctOption = document.querySelector(`#option${{CORRECT_ANSWER_INDEX}}`);
+            if(correctOption) {{
+                correctOption.closest('.option').classList.add('correct');
             }}
 
-            // Disable inputs and send notification
+            // Highlight the selected incorrect answer
+            if (selectedIndex !== CORRECT_ANSWER_INDEX) {{
+                selected.closest('.option').classList.add('incorrect');
+            }}
+
+            // Disable inputs and send notification if correct
             document.querySelectorAll('input[name=""answer""]').forEach(input => {{
                 input.disabled = true;
             }});
 
-            if (isCorrect) {{
+            if (selectedIndex === CORRECT_ANSWER_INDEX) {{
                 chrome.webview.postMessage('correct');
             }}
 
             // Delay the flip to show highlights
             setTimeout(() => {{
                 document.getElementById('flipCard').classList.add('flipped');
-                // Re-render math on the back side
-                setTimeout(() => {{
-                    if (window.MathJax && window.MathJax.typesetPromise) {{
-                        MathJax.typesetPromise();
-                    }}
-                }}, 200);
+                // Re-render math on the back side just in case
+                if (window.MathJax && window.MathJax.typesetPromise) {{
+                    MathJax.typesetPromise();
+                }}
             }}, 1000);
         }}
 
         function flipBack() {{
             document.getElementById('flipCard').classList.remove('flipped');
-            // Re-render math on the front side
-            setTimeout(() => {{
-                if (window.MathJax && window.MathJax.typesetPromise) {{
-                    MathJax.typesetPromise();
-                }}
-            }}, 100);
         }}
 
         function openPdfDirectory() {{
             chrome.webview.postMessage('openPdfDirectory');
         }}
         
-        // Re-render math on window resize
+        // Re-render math on window resize to handle reflows
         window.addEventListener('resize', function() {{
             if (window.MathJax && window.MathJax.typesetPromise) {{
-                setTimeout(() => MathJax.typesetPromise(), 100);
+                MathJax.typesetPromise();
             }}
         }});
     </script>
